@@ -9,7 +9,7 @@ export default function Nav() {
                 <div className="navbar-container">             
                     <ul className="navbar-items">
                         <li className="navbar-item">
-                            <a className="navbar-item-link" href="#">
+                            <a className="navbar-item-link active" href="#">
                                 Inicio
                             </a>
                         </li>
