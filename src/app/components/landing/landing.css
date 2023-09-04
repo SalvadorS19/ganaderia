@@ -1,15 +1,3 @@
-body{
-    margin: 0;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 1.5;
-    color: #212529;
-    background-color: #fff;
-    -webkit-text-size-adjust: 100%;
-    -webkit-tap-highlight-color: transparent;
-}
-
 .banner{
     background: url(https://i.pinimg.com/564x/60/97/14/609714015672063e0762e834cba15a32.jpg) no-repeat center;
     -ms-background-size: cover;
