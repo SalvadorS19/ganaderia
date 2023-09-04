@@ -40,13 +40,13 @@ body{
     max-width: 1200px;
     margin-right: auto;
     margin-left: auto;
-    padding-top: 3rem !important;
-    padding-bottom: 3rem !important;
+    padding-top: 3rem;
+    padding-bottom: 3rem;
 }
 
 .banner-container-two{
-    padding-top: 3rem !important;
-    padding-bottom: 3rem !important;
+    padding-top: 3rem;
+    padding-bottom: 3rem;
 }
 
 .banner-container-info{
@@ -59,12 +59,12 @@ body{
     font-size: 100px;
     line-height: 100px;
     font-weight: 700;
-    margin-bottom: 1.5rem !important;
+    margin-bottom: 1.5rem;
 }
 
 .banner-text{
     color: #fff;
-    margin-bottom: 1.5rem !important;
+    margin-bottom: 1.5rem;
 }
 
 .btn {
