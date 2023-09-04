@@ -1,6 +1,6 @@
-import Input from '@mui/joy/Input'
 import './footer.css'
-import Button from '@mui/joy/Button'
+import { Button } from '@nextui-org/button'; 
+import { Input } from '@nextui-org/input';
 
 export default function Footer() {
     return (
@@ -60,11 +60,8 @@ export default function Footer() {
                     </ul>
                     <div className="subscribe-section">
                         <h6 className='footer-list-title'>Suscribete</h6>
-                        <form>
-                            <Input
-                                endDecorator={<Button>Enviar</Button>}>                       
-                            </Input>
-                        </form>
+                        <Input placeholder='Correo electronico' type='email'></Input>
+                        <Button color='primary'>Enviar</Button>
                         <p>Suscribete a nuestro boletin de información.</p>
                     </div>
                     <div className="copyright-section">

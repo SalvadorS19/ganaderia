@@ -1,5 +1,4 @@
 import "./landing.css"
-import Button from '@mui/joy/Button';
 
 function Landing(){
     return (
