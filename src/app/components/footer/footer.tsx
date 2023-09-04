@@ -59,12 +59,16 @@ export default function Footer() {
                         </li>
                     </ul>
                     <div className="subscribe-section">
-                        <h6>Suscribete</h6>
+                        <h6 className='footer-list-title'>Suscribete</h6>
                         <form>
-                        <Input
-                            endDecorator={<Button>Message</Button>}>                       
-                        </Input>
+                            <Input
+                                endDecorator={<Button>Enviar</Button>}>                       
+                            </Input>
                         </form>
+                        <p>Suscribete a nuestro boletin de información.</p>
+                    </div>
+                    <div className="copyright-section">
+                        © 2023 El Ganado Feliz. Todos los derechos reservados.
                     </div>
                 </div>
             </div>
