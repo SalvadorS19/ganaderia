@@ -1,9 +1,12 @@
 import './globals.css'
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Poppins } from 'next/font/google'
 import { Providers } from './providers'
 
-const inter = Inter({ subsets: ['latin'] })
+const poppins = Poppins(
+  { weight: ['300','400', '500', '700', '800'],
+  subsets: ['latin']
+});
 
 export const metadata: Metadata = {
   title: 'El Ganado Feliz',
@@ -17,7 +20,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es" className='light'>
-      <body>
+      <body className={poppins.className}>
         <Providers>
           {children}
         </Providers>

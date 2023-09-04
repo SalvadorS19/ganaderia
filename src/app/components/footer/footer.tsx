@@ -58,10 +58,10 @@ export default function Footer() {
                             Problemas tecnicos
                         </li>
                     </ul>
-                    <div className="subscribe-section">
+                    <div className="footer-list subscription-section">
                         <h6 className='footer-list-title'>Suscribete</h6>
-                        <Input placeholder='Correo electronico' type='email'></Input>
-                        <Button color='primary'>Enviar</Button>
+                        <Input className='mb-3' placeholder='Correo electronico' type='email'></Input>
+                        <Button className='mb-3' color='primary'>Enviar</Button>
                         <p>Suscribete a nuestro boletin de información.</p>
                     </div>
                     <div className="copyright-section">
