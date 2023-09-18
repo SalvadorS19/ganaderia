@@ -1,0 +1,24 @@
+.register-container {
+    padding: 0 2rem 2rem 2rem;
+    min-width: 400px;
+    background-color: rgb(255, 255, 255);
+    border-radius: 20px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.register-form {
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 1rem;
+}
+
+.main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    background-image: url(https://img.freepik.com/vector-gratis/patron-formas-salpicaduras_53876-60578.jpg?w=826&t=st=1694992947~exp=1694993547~hmac=3389288f230c8e724b731aa00e5f55cbf5c47b65370846de64cb331f8404c62c);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
