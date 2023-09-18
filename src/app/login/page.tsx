@@ -2,6 +2,7 @@ import './login.css';
 import { Input } from "@nextui-org/input"
 import { Button } from "@nextui-org/button";
 import { Checkbox } from "@nextui-org/checkbox";
+import { Link } from '@nextui-org/link';
 
 export default function Login() {
     return (
@@ -21,6 +22,7 @@ export default function Login() {
                     ></Input>
                     <Checkbox>Recordarme</Checkbox>
                     <Button color="primary">Ingresar</Button>
+                    <p>¿No tienes cuenta? <Link href='#' >Registrate</Link> </p>
                 </form>
             </div>
         </section>
