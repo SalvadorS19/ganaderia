@@ -1,6 +1,6 @@
 import "./landing.css"
 import Image from "next/image"
-import Vaca from "../../../assets/images/vaca-patineta.jpg";
+import Vaca from "../../assets/images/vaca-patineta.jpg";
 
 function Landing(){
     return (
