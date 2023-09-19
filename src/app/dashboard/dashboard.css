@@ -1,0 +1,35 @@
+
+.dashboard-aside {
+    width: 20%;
+    background-image: url(https://www.google.com/url?sa=i&url=https%3A%2F%2Fdevbeep.com%2Fcss-blob-effects%2F&psig=AOvVaw1tjQo0cUWmFNwQRg7X-ktM&ust=1695231123750000&source=images&cd=vfe&opi=89978449&ved=0CBAQjRxqFwoTCKiRx4Ont4EDFQAAAAAdAAAAABAE);    
+    background-size: cover;
+}
+
+.dashboard-title {
+    font-weight: bold;
+    font-size: large;
+    margin-bottom: 1rem;
+
+}
+
+.dashboard-tabview {
+    width: 80%;
+    background-color: aliceblue;
+}
+
+.dashboard-modules {
+    padding: 1rem;
+}
+
+.dashboard-item {
+    margin: 1rem;
+}
+
+.dashboard-item:hover {
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.dashboard-item:hover i::before{
+    font-weight: 700;
+}
