@@ -1,15 +1,19 @@
 
 .dashboard-aside {
-    width: 20%;
+    padding: 1rem;
+    width: 300px;
     background-image: url(https://www.google.com/url?sa=i&url=https%3A%2F%2Fdevbeep.com%2Fcss-blob-effects%2F&psig=AOvVaw1tjQo0cUWmFNwQRg7X-ktM&ust=1695231123750000&source=images&cd=vfe&opi=89978449&ved=0CBAQjRxqFwoTCKiRx4Ont4EDFQAAAAAdAAAAABAE);    
     background-size: cover;
 }
 
 .dashboard-title {
+    font-size: 20px;
     font-weight: bold;
-    font-size: large;
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
+}
 
+.dashboard-section {
+    margin-bottom: 2.5rem;
 }
 
 .dashboard-tabview {
@@ -17,19 +21,18 @@
     background-color: aliceblue;
 }
 
-.dashboard-modules {
-    padding: 1rem;
-}
-
 .dashboard-item {
-    margin: 1rem;
+    padding: 0 .5rem;
+    margin-bottom: 1rem;
+    transition: transform .3s;
 }
 
 .dashboard-item:hover {
-    font-weight: bold;
+    font-weight: 500;
     cursor: pointer;
+    transform: translateX(6px);
 }
 
 .dashboard-item:hover i::before{
-    font-weight: 700;
+    font-weight: 500;
 }
