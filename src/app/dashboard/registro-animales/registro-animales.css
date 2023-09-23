@@ -1,0 +1,15 @@
+.tabview-container {
+    padding: 0 2rem 2rem 2rem;
+    min-width: 400px;
+    background-color: rgb(255, 255, 255);
+    border-radius: 20px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.tabview-form {
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 1rem;
+}
+
