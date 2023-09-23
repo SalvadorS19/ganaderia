@@ -14,10 +14,6 @@ export default function Dashboard(){
         1: <RegistroAnimales></RegistroAnimales>,
     }
 
-    function changeTabview(id: number) {
-        setTabviewId(id)
-    }
-
     return (
     <main className="flex">
         <aside className="dashboard-aside">
@@ -26,19 +22,19 @@ export default function Dashboard(){
                 <section className="dashboard-section">
                     <h2 className="dashboard-subtitle">Ganaderia</h2>
                     <hr className="mb-3"/>
-                    <li className="dashboard-item" onClick={()=> changeTabview(1)}>
+                    <li className="dashboard-item" onClick={()=> setTabviewId(1)}>
                         <i className="uil uil-archive"></i>
                         Registro animales
                     </li>
-                    <li className="dashboard-item" onClick={()=> changeTabview(2)}>
+                    <li className="dashboard-item" onClick={()=> setTabviewId(2)}>
                         <i className="uil uil-archive"></i>
                         Control de inventario
                     </li>
-                    <li className="dashboard-item" onClick={()=> changeTabview(3)}>
+                    <li className="dashboard-item" onClick={()=> setTabviewId(3)}>
                         <i className="uil uil-archive"></i>
                         Plan pastoreo
                     </li>
-                    <li className="dashboard-item" onClick={()=> changeTabview(4)}>
+                    <li className="dashboard-item" onClick={()=> setTabviewId(4)}>
                         <i className="uil uil-archive"></i>
                         Salud animales
                     </li>
@@ -47,15 +43,15 @@ export default function Dashboard(){
                 <section className="dashboard-section">
                     <h2 className="dashboard-subtitle">Administrativo</h2>
                     <hr className="mb-3"/>
-                    <li className="dashboard-item" onClick={()=> changeTabview(5)}>
+                    <li className="dashboard-item" onClick={()=> setTabviewId(5)}>
                         <i className="uil uil-archive"></i>
                         Registro actividad
                     </li>
-                    <li className="dashboard-item" onClick={()=> changeTabview(6)}>
+                    <li className="dashboard-item" onClick={()=> setTabviewId(6)}>
                         <i className="uil uil-archive"></i>
                         Datos rendimiento
                     </li>
-                    <li className="dashboard-item" onClick={()=> changeTabview(7)}>
+                    <li className="dashboard-item" onClick={()=> setTabviewId(7)}>
                         <i className="uil uil-archive"></i>
                         Registro trabajadores
                     </li>
