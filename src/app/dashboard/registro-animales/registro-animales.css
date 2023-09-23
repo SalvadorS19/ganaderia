@@ -13,3 +13,20 @@
     gap: 1rem;
 }
 
+.card {
+    background-color: aliceblue;
+    border-radius: 20px;
+    max-width: 300px;
+}
+
+.card-top-img {
+    border-radius: 20px 20px 0 0;
+}
+
+.card-top-img img {
+    border-radius: inherit;
+}
+
+.card-content {
+    padding: 1rem;
+}
