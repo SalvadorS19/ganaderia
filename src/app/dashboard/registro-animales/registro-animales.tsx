@@ -2,6 +2,7 @@ import Vaca from "@/app/models/vaca.model";
 import "./registro-animales.css";
 import { Button } from "@nextui-org/button";
 import Icon from "@/app/components/icon/icon";
+import AgregarAnimal from "./agregar-animal/agregar-animal";
 
 export default function RegistroAnimales() {
   let vacas: Vaca[] = [
@@ -66,6 +67,8 @@ export default function RegistroAnimales() {
       <div className="flex flex-wrap gap-y-5 justify-around">
         {vacas.map((vaca) => tarjetaVaca(vaca))}
       </div> 
+
+      <AgregarAnimal></AgregarAnimal>
     </>
       
     );
