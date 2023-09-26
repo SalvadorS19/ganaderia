@@ -1,7 +1,7 @@
 export default interface Vaca {
-    id: number;
+    id?: number;
     raza: string;
     peso: number;
     edad: number;
-    sexo: string;
+    sexo?: string;
 }

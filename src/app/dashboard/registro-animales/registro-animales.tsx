@@ -1,19 +1,23 @@
-import Vaca from "@/app/models/vaca.model";
 import "./registro-animales.css";
-import { Button } from "@nextui-org/button";
+import Vaca from "@/app/models/vaca.model";
 import Icon from "@/app/components/icon/icon";
-import AgregarAnimal from "./agregar-animal/agregar-animal";
+import { Button } from "@nextui-org/button";
+import { Input } from "@nextui-org/input";
+import { Select, SelectItem } from "@nextui-org/select";
+import { useState } from "react";
 
 export default function RegistroAnimales() {
-  let vacas: Vaca[] = [
-    { id: 1, edad: 12, peso: 12, raza: "Sanabria", sexo: "Hembra" },
 
-    { id: 2, edad: 14, peso: 14, raza: "Sanabria", sexo: "Hembra" },
+  let [razaVaca, setRazaVaca] = useState('');
+  let [edadVaca, setEdadVaca] = useState('');
+  let [pesoVaca, setPesoVaca] = useState('');
 
-    { id: 3, edad: 16, peso: 14, raza: "Sanabria", sexo: "Hembra" },
-
-    { id: 4, edad: 18, peso: 14, raza: "Sanabria", sexo: "Hembra" },
-  ];
+  let [vacas, setVacas] = useState([
+    { edad: 12, peso: 12, raza: "Sanabria", sexo: "Hembra" },
+    { edad: 14, peso: 14, raza: "Sanabria", sexo: "Hembra" },
+    { edad: 16, peso: 14, raza: "Sanabria", sexo: "Hembra" },
+    { edad: 18, peso: 14, raza: "Sanabria", sexo: "Hembra" }
+  ]);
 
   function tarjetaVaca(vaca: Vaca) {
     return (
@@ -54,6 +58,18 @@ export default function RegistroAnimales() {
     );
   }
 
+  function guardarVaca() {
+    const vaca: any = {
+      raza: razaVaca,
+      peso: Number(pesoVaca),
+      edad: Number(edadVaca)
+    }
+    setVacas(vacas => [...vacas, vaca]);
+    setRazaVaca('');
+    setPesoVaca('');
+    setEdadVaca('');
+  }
+
   return (
     <>
       <div className="flex justify-end w-full mb-6">
@@ -64,43 +80,48 @@ export default function RegistroAnimales() {
         >Agregar</Button>
       </div>
 
-      <div className="flex flex-wrap gap-y-5 justify-around">
-        {vacas.map((vaca) => tarjetaVaca(vaca))}
+      <div className="flex gap-5">
+        <div className="grow">
+          <div className="flex flex-wrap gap-y-5 justify-around">
+            {vacas.map((vaca) => tarjetaVaca(vaca))}
+          </div>
+        </div>
+        <div className="card p-3 max-h-[500px] min-w-[250px]">
+          <h1 className="mb-5 text-xl font-bold text-center m-5">Registro Animal</h1>
+            <form className="tabview-form">
+              <Input
+                type="text"
+                label="Raza"
+                value={razaVaca}
+                onValueChange={setRazaVaca}
+                required
+              ></Input>
+              <Input
+                type="number"
+                label="Edad (meses)"
+                value={edadVaca}
+                onValueChange={setEdadVaca}
+                required
+              ></Input>
+              <Input
+                type="number"
+                label="Peso (kg)"
+                value={pesoVaca}
+                onValueChange={setPesoVaca}
+                required
+              ></Input>
+              {/* <Button
+                  startContent={<i className="uil uil-upload"></i>}
+                  color="primary"
+              >Carga historial clinico</Button> */}
+              <Select label="Seleccione el sexo" className="max-w-xs">
+                <SelectItem key="male" value="male">Macho</SelectItem>
+                <SelectItem key="female" value="female">Hembra</SelectItem>
+              </Select>
+              <Button color="primary" onPress={guardarVaca}>Registrar Vaca</Button>
+          </form>
+        </div>
       </div> 
-
-      <AgregarAnimal></AgregarAnimal>
-    </>
-      
-    );
-    // <div className="tabview-container">
-    //     <h1 className="mb-5 text-xl font-bold text-center m-5">Registro Animal</h1>
-    //     <form className="tabview-form">
-    //         <Input
-    //             type="text"
-    //             label="Raza"
-    //             required
-    //         ></Input>
-    //         <Input
-    //             type="text"
-    //             label="Edad"
-    //             required
-    //         ></Input>
-    //         <Input
-    //             type="text"
-    //             label="Peso"
-    //             required
-    //         ></Input>
-    //         <Button
-    //             startContent={<i className="uil uil-upload"></i>}
-    //             color="primary"
-    //         >Carga historial clinico</Button>
-    //         <Input
-    //             type="text"
-    //             label="Cantidad de partos"
-    //             required
-    //         ></Input>
-    //         <Button color="primary">Registrar Vaca</Button>
-    //     </form>
-    // </div>
-  
+    </>  
+  );
 }
