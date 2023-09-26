@@ -1,7 +1,7 @@
 import Vaca from "@/app/models/vaca.model";
 import "./registro-animales.css";
-import { Input } from "@nextui-org/input";
 import { Button } from "@nextui-org/button";
+import Icon from "@/app/components/icon/icon";
 
 export default function RegistroAnimales() {
   let vacas: Vaca[] = [
@@ -20,7 +20,7 @@ export default function RegistroAnimales() {
         <section className="card-top-img">
           <img
             src="https://i.pinimg.com/564x/cf/4d/32/cf4d32d0b8cfc5ff947366c9be7a42d2.jpg"
-            alt=""
+            alt="Imagen"
           />
         </section>
         <section className="card-content">
@@ -49,8 +49,12 @@ export default function RegistroAnimales() {
             </div>
           </div>
           <div className="flex gap-3 justify-end">
-            <Button color="danger">Eliminar</Button>
-            <Button color="primary">Modificar</Button>
+            <Button isIconOnly color="danger">
+              <Icon name="pen" size="lg"></Icon>
+            </Button>
+            <Button isIconOnly color="primary">
+              <Icon name="times" size="lg"></Icon>
+            </Button>
           </div>
         </section>
       </div>
@@ -58,16 +62,17 @@ export default function RegistroAnimales() {
   }
 
   return (
-    <div className="w-full">
-      <div className="flex justify-end">
+    <>
+      <div className="flex justify-end w-full mb-6">
         <Button color="primary">Registrar Animal</Button>
       </div>
 
-      <div className="grid grid-cols-3 gap-5 my-5 justify-evenly">
-          {vacas.map((vaca) => tarjetaVaca(vaca))}
+      <div className="flex flex-wrap gap-y-5 justify-around">
+        {vacas.map((vaca) => tarjetaVaca(vaca))}
       </div> 
-    </div>
-
+    </>
+      
+    );
     // <div className="tabview-container">
     //     <h1 className="mb-5 text-xl font-bold text-center m-5">Registro Animal</h1>
     //     <form className="tabview-form">
@@ -98,5 +103,5 @@ export default function RegistroAnimales() {
     //         <Button color="primary">Registrar Vaca</Button>
     //     </form>
     // </div>
-  );
+  
 }
