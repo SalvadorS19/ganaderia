@@ -24,38 +24,30 @@ export default function RegistroAnimales() {
           />
         </section>
         <section className="card-content">
-          <div className="flex mb-3">
-            <div className="mr-3">
-              <div className="flex">
-                <h2 className="mr-2 font-medium mb-2">Raza:</h2>
-                <p>{vaca.raza}</p>
-              </div>
-              <div className="flex">
-                <h2 className="mr-2 font-medium">Peso:</h2>
-                <p>{vaca.peso}</p>
-                <p className="ml-1">Kg</p>
-              </div>
-            </div>
-            <div>
-              <div className="flex">
-                <h2 className="mr-2 font-medium mb-2">Edad:</h2>
-                <p>{vaca.edad}</p>
-                <p className="ml-1">Meses</p>
-              </div>
-              <div className="flex">
-                <h2 className="mr-2 font-medium">Sexo:</h2>
-                <p>{vaca.sexo}</p>
-              </div>
-            </div>
+          <div className="flex gap-1">
+            <h2 className="font-medium">Raza:</h2>
+            <p>{ vaca.raza }</p>
           </div>
-          <div className="flex gap-3 justify-end">
-            <Button isIconOnly color="primary" title="Eliminar animal">
-              <Icon name="pen"></Icon>
-            </Button>
-            <Button isIconOnly color="danger" title="Eliminar animal">
-              <Icon name="times"></Icon>
-            </Button>
+          <div className="flex gap-1">
+            <h2 className="font-medium">Peso:</h2>
+            <p>{ vaca.peso } Kg</p>
           </div>
+          <div className="flex gap-1">
+            <h2 className="font-medium">Edad:</h2>
+            <p>{ vaca.edad } Meses</p>
+          </div>
+          <div className="flex gap-1">
+            <h2 className="font-medium">Sexo:</h2>
+            <p>{ vaca.sexo }</p>
+          </div>
+        </section>
+        <section className="card-footer">
+          <Button isIconOnly color="primary" title="Eliminar animal">
+            <Icon name="pen"></Icon>
+          </Button>
+          <Button isIconOnly color="danger" title="Eliminar animal">
+            <Icon name="times"></Icon>
+          </Button>
         </section>
       </div>
     );
