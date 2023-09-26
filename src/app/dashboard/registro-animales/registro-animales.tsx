@@ -49,11 +49,11 @@ export default function RegistroAnimales() {
             </div>
           </div>
           <div className="flex gap-3 justify-end">
-            <Button isIconOnly color="danger">
-              <Icon name="pen" size="lg"></Icon>
+            <Button isIconOnly color="primary" title="Eliminar animal">
+              <Icon name="pen"></Icon>
             </Button>
-            <Button isIconOnly color="primary">
-              <Icon name="times" size="lg"></Icon>
+            <Button isIconOnly color="danger" title="Eliminar animal">
+              <Icon name="times"></Icon>
             </Button>
           </div>
         </section>
@@ -64,7 +64,11 @@ export default function RegistroAnimales() {
   return (
     <>
       <div className="flex justify-end w-full mb-6">
-        <Button color="primary">Registrar Animal</Button>
+        <Button 
+        title="Registrar animal" 
+        color="primary" 
+        endContent={<Icon name="plus"></Icon>}
+        >Agregar</Button>
       </div>
 
       <div className="flex flex-wrap gap-y-5 justify-around">
