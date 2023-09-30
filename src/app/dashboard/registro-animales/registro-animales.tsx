@@ -12,6 +12,7 @@ import { ListSelectItem } from "@/app/models/selectItem.model";
 export default function RegistroAnimales() {
 
   const [isOpenAgregar, setIsOpenAgregar] = useState(false);
+  const [selectedVaca, setSelectedVaca] = useState({});
 
   const sexoItems: ListSelectItem[]  = [
     { label: 'Macho', value: 'M' },
@@ -19,10 +20,10 @@ export default function RegistroAnimales() {
   ]
 
   let [vacas, setVacas]: [Vaca[], any] = useState([
-    { id: 1, edad: 12, peso: 12, raza: "Sanabria" },
-    { id: 2, edad: 14, peso: 14, raza: "Sanabria" },
-    { id: 3, edad: 16, peso: 14, raza: "Sanabria" },
-    { id: 4, edad: 18, peso: 14, raza: "Sanabria" }
+    { id: 1, edad: 12, peso: 12, raza: "Sanabria", sexo: {label: 'Macho', value: 'M'} },
+    { id: 2, edad: 14, peso: 14, raza: "Sanabria", sexo: {label: 'Macho', value: 'M'} },
+    { id: 3, edad: 16, peso: 14, raza: "Sanabria", sexo: {label: 'Macho', value: 'M'} },
+    { id: 4, edad: 18, peso: 14, raza: "Sanabria", sexo: {label: 'Macho', value: 'M'} }
   ]);
 
   function tarjetaVaca(vaca: Vaca) {
@@ -53,7 +54,7 @@ export default function RegistroAnimales() {
           </div>
         </section>
         <section className="card-footer">
-          <Button isIconOnly color="primary" title="Eliminar animal">
+          <Button isIconOnly color="primary" title="Editar animal" onPress={()=> editarVaca(vaca)}>
             <Icon name="pen"></Icon>
           </Button>
           <Button isIconOnly color="danger" title="Eliminar animal">
@@ -64,22 +65,45 @@ export default function RegistroAnimales() {
     );
   }
 
-  function AgregarAnimal() {
+  function editarVaca(vaca: Vaca) {
+    setSelectedVaca(vaca);
+    setIsOpenAgregar(true);
+  }
 
-    const [razaVaca, setRazaVaca] = useState('');
-    const [edadVaca, setEdadVaca] = useState('');
-    const [pesoVaca, setPesoVaca] = useState('');
-    const [sexoVaca, setSexoVaca] = useState('');
+  function agregarVaca() {
+    setSelectedVaca({});
+    setIsOpenAgregar(true);
+  }
 
+  function RegistroAnimal() {
+    const vacaEdicion = selectedVaca as Vaca;
+    const [razaVaca, setRazaVaca] = useState(vacaEdicion.raza ? vacaEdicion.raza : '');
+    const [edadVaca, setEdadVaca] = useState(vacaEdicion.edad ? String(vacaEdicion.edad) : '');
+    const [pesoVaca, setPesoVaca] = useState(vacaEdicion.peso ? String(vacaEdicion.peso) : '');
+    const [sexoVaca, setSexoVaca] = useState(vacaEdicion.sexo ? vacaEdicion.sexo.value : '');
+    
+    
     function guardarVaca() {
+      const id = vacas.reduce((anterior, actual) => {
+        return actual.id > anterior.id ? actual : anterior;
+      }).id;
       const sexo = sexoItems.find(s => s.value === sexoVaca);
+
       const newVaca: Vaca = {
+        id: vacaEdicion.id ? vacaEdicion.id : id,
         edad: Number(edadVaca),
         raza: razaVaca,
         peso: Number(pesoVaca),
-        sexo
+        sexo: vacaEdicion.sexo ? vacaEdicion.sexo : sexo
       }
-      setVacas([...vacas, newVaca]);
+      if (vacaEdicion) {
+        const index = vacas.findIndex(v => v.id === vacaEdicion.id);
+        let newVacas = [...vacas];
+        newVacas[index] = newVaca;
+        setVacas(newVacas);
+      } else {
+        setVacas([...vacas, newVaca]);
+      }
       setIsOpenAgregar(false);
     }
 
@@ -93,7 +117,9 @@ export default function RegistroAnimales() {
             <ModalContent>
             {(onClose) => (
               <>
-                <ModalHeader className="flex flex-col gap-1">Registrar animal</ModalHeader>
+                <ModalHeader className="flex flex-col gap-1">
+                  {selectedVaca ? "Editar animal" : 'Registrar animal'}
+                </ModalHeader>
                 <ModalBody>
                   <form className="tabview-form">
                     <Input
@@ -154,14 +180,14 @@ export default function RegistroAnimales() {
           title="Registrar animal" 
           color="primary" 
           endContent={<Icon name="plus"></Icon>}
-          onPress={()=> setIsOpenAgregar(true)}
+          onPress={agregarVaca}
         >Agregar</Button>
       </div>
 
       <div className="flex flex-wrap gap-y-5 justify-around">
         {vacas.map((vaca) => tarjetaVaca(vaca))}
       </div>
-      <AgregarAnimal></AgregarAnimal>
+      <RegistroAnimal></RegistroAnimal>
     </>  
   );
 }
