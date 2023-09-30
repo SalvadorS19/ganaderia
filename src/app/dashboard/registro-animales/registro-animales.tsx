@@ -7,12 +7,13 @@ import { Select, SelectItem } from "@nextui-org/select";
 import { useState } from "react";
 import { Modal, ModalContent, ModalBody, ModalHeader, ModalFooter } from "@nextui-org/modal";
 import { ListSelectItem } from "@/app/models/selectItem.model";
+import {Popover, PopoverTrigger, PopoverContent} from "@nextui-org/popover";
 
 
 export default function RegistroAnimales() {
 
   const [isOpenAgregar, setIsOpenAgregar] = useState(false);
-  const [selectedVaca, setSelectedVaca] = useState({});
+  const [selectedVaca, setSelectedVaca]: [any, any] = useState({});
 
   const sexoItems: ListSelectItem[]  = [
     { label: 'Macho', value: 'M' },
@@ -57,9 +58,7 @@ export default function RegistroAnimales() {
           <Button isIconOnly color="primary" title="Editar animal" onPress={()=> editarVaca(vaca)}>
             <Icon name="pen"></Icon>
           </Button>
-          <Button isIconOnly color="danger" title="Eliminar animal">
-            <Icon name="times"></Icon>
-          </Button>
+          <EliminarAnimal vacaId={vaca.id}></EliminarAnimal>
         </section>
       </div>
     );
@@ -84,9 +83,14 @@ export default function RegistroAnimales() {
     
     
     function guardarVaca() {
-      const id = vacas.reduce((anterior, actual) => {
-        return actual.id > anterior.id ? actual : anterior;
-      }).id;
+      let id;
+      if (vacas.length) {
+        id = vacas.reduce((anterior, actual) => {
+          return actual.id > anterior.id ? actual : anterior;
+        }).id;
+      } else {
+        id = 1;
+      }
       const sexo = sexoItems.find(s => s.value === sexoVaca);
 
       const newVaca: Vaca = {
@@ -96,7 +100,7 @@ export default function RegistroAnimales() {
         peso: Number(pesoVaca),
         sexo: vacaEdicion.sexo ? vacaEdicion.sexo : sexo
       }
-      if (vacaEdicion) {
+      if (vacaEdicion.id) {
         const index = vacas.findIndex(v => v.id === vacaEdicion.id);
         let newVacas = [...vacas];
         newVacas[index] = newVaca;
@@ -118,7 +122,7 @@ export default function RegistroAnimales() {
             {(onClose) => (
               <>
                 <ModalHeader className="flex flex-col gap-1">
-                  {selectedVaca ? "Editar animal" : 'Registrar animal'}
+                  {selectedVaca.id ? "Editar animal" : 'Registrar animal'}
                 </ModalHeader>
                 <ModalBody>
                   <form className="tabview-form">
@@ -171,6 +175,41 @@ export default function RegistroAnimales() {
           </Modal>
         </>
       );
+  }
+
+  function EliminarAnimal({vacaId}: {vacaId: number}) {
+    const [isOpen, setIsOpen] = useState(false);
+
+    function eliminarVaca() {
+      let newVacas = vacas.filter(vaca => vaca.id !== vacaId);
+      setVacas(newVacas);
+    }
+    
+    return (
+      <Popover placement="bottom" isOpen={isOpen} onOpenChange={(open) => setIsOpen(open)}>
+        <PopoverTrigger>
+          <Button isIconOnly color="danger" title="Eliminar animal">
+            <Icon name="times"></Icon>
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-[240px]">
+          {(titleProps) => (
+            <div className="px-1 py-2 w-full">
+              <p className="text-small font-bold text-foreground" {...titleProps}>
+                Confirmación
+              </p>
+              <div className="mt-2 flex flex-col gap-2 w-full">
+                ¿Esta seguro de eliminarlo?
+                <div className="flex gap-3 justify-end">
+                  <Button color="danger" size="sm" onPress={eliminarVaca}>Si</Button>
+                  <Button size="sm" onPress={()=> setIsOpen(false)}>No</Button>
+                </div>
+              </div>
+            </div>
+          )}
+        </PopoverContent>
+      </Popover>
+    );
   }
 
   return (
