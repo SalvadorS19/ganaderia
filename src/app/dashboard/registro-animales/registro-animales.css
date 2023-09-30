@@ -16,9 +16,9 @@
 .card {
     display: flex;
     flex-flow: column nowrap;
-    background-color: aliceblue;
+    background-color: #ffffff;
     border-radius: 20px;
-    max-width: 300px;
+    max-width: 350px;
 }
 
 .card-top-img {

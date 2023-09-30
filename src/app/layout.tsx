@@ -22,7 +22,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es" className='light'>
-      <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css"></link>
+      <head>
+        <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css"></link>
+      </head>
       <body className={poppins.className}>
         <Nav></Nav>
         <Providers>
