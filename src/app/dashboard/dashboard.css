@@ -29,13 +29,17 @@
     transition: transform .3s;
 }
 
-.dashboard-item:hover {
+.dashboard-item.active, .dashboard-item.active i::before {
+    font-weight: 700;
+}
+
+.dashboard-item:hover:not(.active) {
     font-weight: 500;
     cursor: pointer;
     transform: translateX(6px);
 }
 
-.dashboard-item:hover i::before{
+.dashboard-item:hover:not(.active) i::before{
     font-weight: 500;
 }
 

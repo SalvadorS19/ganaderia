@@ -14,6 +14,15 @@ export default function Dashboard(){
         1: <RegistroAnimales></RegistroAnimales>,
     }
 
+    function changeTab(event: any) {
+        const lastTab = document.querySelector('.dashboard-item.active');
+        lastTab?.classList.remove('active');
+        const target: HTMLElement = event.target;
+        const tabId = Number(target.id.charAt(target.id.length - 1));
+        target.classList.add('active');
+        setTabviewId(tabId);
+    }
+
     return (
     <main className="flex">
         <aside className="dashboard-aside">
@@ -22,19 +31,19 @@ export default function Dashboard(){
                 <section className="dashboard-section">
                     <h2 className="dashboard-subtitle">Ganaderia</h2>
                     <hr className="mb-3"/>
-                    <li className="dashboard-item" onClick={()=> setTabviewId(1)}>
+                    <li className="dashboard-item active" id="tabItem-1" onClick={changeTab}>
                         <i className="uil uil-archive"></i>
                         Registro animales
                     </li>
-                    <li className="dashboard-item" onClick={()=> setTabviewId(2)}>
+                    <li className="dashboard-item" id="tabItem-2" onClick={changeTab}>
                         <i className="uil uil-archive"></i>
                         Control de inventario
                     </li>
-                    <li className="dashboard-item" onClick={()=> setTabviewId(3)}>
+                    <li className="dashboard-item" id="tabItem-3" onClick={changeTab}>
                         <i className="uil uil-archive"></i>
                         Plan pastoreo
                     </li>
-                    <li className="dashboard-item" onClick={()=> setTabviewId(4)}>
+                    <li className="dashboard-item" id="tabItem-4" onClick={changeTab}>
                         <i className="uil uil-archive"></i>
                         Salud animales
                     </li>
@@ -43,15 +52,15 @@ export default function Dashboard(){
                 <section className="dashboard-section">
                     <h2 className="dashboard-subtitle">Administrativo</h2>
                     <hr className="mb-3"/>
-                    <li className="dashboard-item" onClick={()=> setTabviewId(5)}>
+                    <li className="dashboard-item" id="tabItem-5" onClick={changeTab}>
                         <i className="uil uil-archive"></i>
                         Registro actividad
                     </li>
-                    <li className="dashboard-item" onClick={()=> setTabviewId(6)}>
+                    <li className="dashboard-item" id="tabItem-6" onClick={changeTab}>
                         <i className="uil uil-archive"></i>
                         Datos rendimiento
                     </li>
-                    <li className="dashboard-item" onClick={()=> setTabviewId(7)}>
+                    <li className="dashboard-item" id="tabItem-7" onClick={changeTab}>
                         <i className="uil uil-archive"></i>
                         Registro trabajadores
                     </li>
