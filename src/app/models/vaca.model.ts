@@ -1,9 +1,9 @@
 import { ListSelectItem } from "./selectItem.model";
 
 export default interface Vaca {
-    id: number;
+    id: string;
     raza: string;
-    peso: number;
-    edad: number;
+    peso: string;
+    edad: string;
     sexo?: ListSelectItem;
 }

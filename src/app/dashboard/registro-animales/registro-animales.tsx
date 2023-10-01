@@ -12,19 +12,19 @@ import {Popover, PopoverTrigger, PopoverContent} from "@nextui-org/popover";
 
 export default function RegistroAnimales() {
 
-  const [isOpenAgregar, setIsOpenAgregar] = useState(false);
-  const [selectedVaca, setSelectedVaca]: [any, any] = useState({});
+  const [isOpenRegistroAnimal, setIsOpenRegistroAnimal] = useState(false);
+  const [selectedVaca, setSelectedVaca]: [Vaca, Function] = useState({} as Vaca);
 
   const sexoItems: ListSelectItem[]  = [
     { label: 'Macho', value: 'M' },
     { label: 'Hembra', value: 'F' }
   ]
 
-  let [vacas, setVacas]: [Vaca[], any] = useState([
-    { id: 1, edad: 12, peso: 12, raza: "Sanabria", sexo: {label: 'Macho', value: 'M'} },
-    { id: 2, edad: 14, peso: 14, raza: "Sanabria", sexo: {label: 'Macho', value: 'M'} },
-    { id: 3, edad: 16, peso: 14, raza: "Sanabria", sexo: {label: 'Macho', value: 'M'} },
-    { id: 4, edad: 18, peso: 14, raza: "Sanabria", sexo: {label: 'Macho', value: 'M'} }
+  let [vacas, setVacas]: [Vaca[], Function] = useState([
+    { id: '1', edad: '12', peso: '12', raza: "Sanabria", sexo: {label: 'Macho', value: 'M'} },
+    { id: '2', edad: '14', peso: '14', raza: "Sanabria", sexo: {label: 'Macho', value: 'M'} },
+    { id: '3', edad: '16', peso: '14', raza: "Sanabria", sexo: {label: 'Macho', value: 'M'} },
+    { id: '4', edad: '18', peso: '14', raza: "Sanabria", sexo: {label: 'Macho', value: 'M'} }
   ]);
 
   function tarjetaVaca(vaca: Vaca) {
@@ -66,58 +66,70 @@ export default function RegistroAnimales() {
 
   function editarVaca(vaca: Vaca) {
     setSelectedVaca(vaca);
-    setIsOpenAgregar(true);
+    setIsOpenRegistroAnimal(true);
   }
 
   function agregarVaca() {
-    setSelectedVaca({});
-    setIsOpenAgregar(true);
+    setSelectedVaca({} as Vaca);
+    setIsOpenRegistroAnimal(true);
   }
 
   function RegistroAnimal() {
-    const vacaEdicion = selectedVaca as Vaca;
-    const [razaVaca, setRazaVaca] = useState(vacaEdicion.raza ? vacaEdicion.raza : '');
-    const [edadVaca, setEdadVaca] = useState(vacaEdicion.edad ? String(vacaEdicion.edad) : '');
-    const [pesoVaca, setPesoVaca] = useState(vacaEdicion.peso ? String(vacaEdicion.peso) : '');
-    const [sexoVaca, setSexoVaca] = useState(vacaEdicion.sexo ? vacaEdicion.sexo.value : '');
-    
-    
-    function guardarVaca() {
-      let id;
-      if (vacas.length) {
-        id = vacas.reduce((anterior, actual) => {
-          return actual.id > anterior.id ? actual : anterior;
-        }).id;
-      } else {
-        id = 1;
-      }
-      const sexo = sexoItems.find(s => s.value === sexoVaca);
-
-      const newVaca: Vaca = {
-        id: vacaEdicion.id ? vacaEdicion.id : id,
-        edad: Number(edadVaca),
-        raza: razaVaca,
-        peso: Number(pesoVaca),
-        sexo: vacaEdicion.sexo ? vacaEdicion.sexo : sexo
-      }
-      if (vacaEdicion.id) {
-        const index = vacas.findIndex(v => v.id === vacaEdicion.id);
-        let newVacas = [...vacas];
-        newVacas[index] = newVaca;
-        setVacas(newVacas);
-      } else {
-        setVacas([...vacas, newVaca]);
-      }
-      setIsOpenAgregar(false);
-    }
+    const emptyVaca: Vaca = {id: '', peso: '', edad: '', raza: '', sexo: {label: '', value: ''}}
+    const [vacaForm, setVacaForm]: [Vaca, Function] = useState(
+      selectedVaca.id ? selectedVaca : emptyVaca
+    );
 
     function onOpenChange(event: any) {
-      setIsOpenAgregar(event);
+      setIsOpenRegistroAnimal(event);
+    }
+
+    function handleVacaForm(event: any) {
+      const {name, value} = event.target;
+      switch (name) {
+        case "sexo":
+          const sexo = sexoItems.find((s) => s.value === value);
+          setVacaForm((prevFormData: Vaca) => ({
+            ...prevFormData,
+            [name]: sexo,
+          }));
+          break;
+        default:
+          setVacaForm((prevFormData: Vaca) => ({
+            ...prevFormData,
+            [name]: value,
+          }));
+          break;
+      }
+    }
+    
+    function guardarVaca() {
+      if (!vacaForm.id) {
+        let idVaca;
+        if (vacas.length > 0) {
+          const ultimaVaca = vacas.reduce((anterior, actual) => {
+            return actual.id > anterior.id ? actual : anterior;
+          });
+          idVaca = ultimaVaca.id + 1;
+        } else {
+          idVaca = 1;
+        }
+      }
+      
+      const indexVaca = vacas.findIndex(v => v.id === vacaForm.id);
+      let newVacas = [...vacas];
+      if (indexVaca != -1) {
+        newVacas[indexVaca] = vacaForm;
+        setVacas(newVacas); 
+      } else {
+        setVacas([...vacas, vacaForm]);
+      }
+      setIsOpenRegistroAnimal(false);
     }
 
     return (
         <>
-          <Modal isOpen={isOpenAgregar} onOpenChange={onOpenChange}>
+          <Modal isOpen={isOpenRegistroAnimal} onOpenChange={onOpenChange}>
             <ModalContent>
             {(onClose) => (
               <>
@@ -127,30 +139,34 @@ export default function RegistroAnimales() {
                 <ModalBody>
                   <form className="tabview-form">
                     <Input
+                      name="raza"
                       type="text"
                       label="Raza"
-                      value={razaVaca}
-                      onValueChange={setRazaVaca}
+                      value={vacaForm.raza}
+                      onChange={handleVacaForm}
                       required
                     ></Input>
                     <Input
+                      name="edad"
                       type="number"
                       label="Edad (meses)"
-                      value={edadVaca}
-                      onValueChange={setEdadVaca}
+                      value={vacaForm.edad}
+                      onChange={handleVacaForm}
                       required
                     ></Input>
                     <Input
+                      name="peso"
                       type="number"
                       label="Peso (kg)"
-                      value={pesoVaca}
-                      onValueChange={setPesoVaca}
+                      value={vacaForm.peso}
+                      onChange={handleVacaForm}
                       required
                     ></Input>
                     <Select 
                       items={sexoItems}
-                      selectedKeys={sexoVaca}
-                      onSelectionChange={(keys: any) => setSexoVaca(keys.currentKey)}
+                      name="sexo"
+                      selectedKeys={vacaForm.sexo?.value}
+                      onChange={handleVacaForm}
                       label="Seleccione el sexo"
                     >
                       {sexoItems.map((sexo) => (
@@ -177,7 +193,7 @@ export default function RegistroAnimales() {
       );
   }
 
-  function EliminarAnimal({vacaId}: {vacaId: number}) {
+  function EliminarAnimal({vacaId}: {vacaId: string}) {
     const [isOpen, setIsOpen] = useState(false);
 
     function eliminarVaca() {
