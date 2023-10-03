@@ -20,7 +20,7 @@ function Landing(){
                     </div>
                 </div>
             </section>
-            <section className="about-us">
+            <section className="about-us" id="about-us">
                 <div className="container">
                     <div className="flex flex-wrap md:flex-nowrap">
                         <div className="side-img">

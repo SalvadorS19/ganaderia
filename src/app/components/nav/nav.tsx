@@ -1,37 +1,38 @@
+'use client'
 import "./nav.css";
+import React from "react";
+import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, Button } from "@nextui-org/react";
 
 export default function Nav() {
   return (
-    <header className="layout-header">
-        <div className="container">
-            <nav className="navbar">
-                <h1 className="navbar-logo">El Ganado Feliz</h1>
-                <div className="navbar-container">             
-                    <ul className="navbar-items">
-                        <li className="navbar-item">
-                            <a className="navbar-item-link active" href="#">
-                                Inicio
-                            </a>
-                        </li>
-                        <li className="navbar-item">
-                            <a className="navbar-item-link" href="#">
-                                Nosotros
-                            </a>
-                        </li>
-                        <li className="navbar-item">
-                            <a className="navbar-item-link" href="#">
-                                Servicios
-                            </a>
-                        </li>
-                        <li className="navbar-item">
-                            <a className="navbar-item-link" href="#">
-                                Contactanos
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-        </div>
-    </header>
+    <Navbar>
+      <NavbarBrand>
+        <Link className="text-xl flex gap-2" href="/" color="foreground">
+            Le Vache<span className="text-inherit font-bold">Patineuse</span>
+        </Link>
+      </NavbarBrand>
+      <NavbarContent className="hidden sm:flex gap-5" justify="end">
+        <NavbarItem isActive>
+          <Link color="secondary" href="/" aria-current="page">
+            Inicio
+          </Link>
+        </NavbarItem>
+        <NavbarItem>
+          <Link href="#about-us" color="foreground">
+            Nosotros
+          </Link>
+        </NavbarItem>
+        <NavbarItem>
+          <Link color="foreground" href="#">
+            Contactanos
+          </Link>
+        </NavbarItem>
+        <NavbarItem>
+          <Button as={Link} color="secondary" href="login" variant="flat">
+            Ingresar
+          </Button>
+        </NavbarItem>
+      </NavbarContent>
+    </Navbar>
   );
 }
