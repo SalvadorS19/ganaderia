@@ -26,14 +26,14 @@ export default function RegistroAnimales() {
     { id: '2', edad: '14', peso: '14', raza: "Sanabria", sexo: {label: 'Macho', value: 'M'} },
     { id: '3', edad: '16', peso: '14', raza: "Sanabria", sexo: {label: 'Macho', value: 'M'} },
     { id: '4', edad: '18', peso: '14', raza: "Sanabria", sexo: {label: 'Macho', value: 'M'} },
-    { id: '1', edad: '12', peso: '12', raza: "Sanabria", sexo: {label: 'Macho', value: 'M'} },
-    { id: '2', edad: '14', peso: '14', raza: "Sanabria", sexo: {label: 'Macho', value: 'M'} },
-    { id: '3', edad: '16', peso: '14', raza: "Sanabria", sexo: {label: 'Macho', value: 'M'} },
-    { id: '4', edad: '18', peso: '14', raza: "Sanabria", sexo: {label: 'Macho', value: 'M'} },
-    { id: '1', edad: '12', peso: '12', raza: "Sanabria", sexo: {label: 'Macho', value: 'M'} },
-    { id: '2', edad: '14', peso: '14', raza: "Sanabria", sexo: {label: 'Macho', value: 'M'} },
-    { id: '3', edad: '16', peso: '14', raza: "Sanabria", sexo: {label: 'Macho', value: 'M'} },
-    { id: '4', edad: '18', peso: '14', raza: "Sanabria", sexo: {label: 'Macho', value: 'M'} }
+    { id: '5', edad: '12', peso: '12', raza: "Sanabria", sexo: {label: 'Macho', value: 'M'} },
+    { id: '6', edad: '14', peso: '14', raza: "Sanabria", sexo: {label: 'Macho', value: 'M'} },
+    { id: '7', edad: '16', peso: '14', raza: "Sanabria", sexo: {label: 'Macho', value: 'M'} },
+    { id: '8', edad: '18', peso: '14', raza: "Sanabria", sexo: {label: 'Macho', value: 'M'} },
+    { id: '9', edad: '12', peso: '12', raza: "Sanabria", sexo: {label: 'Macho', value: 'M'} },
+    { id: '10', edad: '14', peso: '14', raza: "Sanabria", sexo: {label: 'Macho', value: 'M'} },
+    { id: '11', edad: '16', peso: '14', raza: "Sanabria", sexo: {label: 'Macho', value: 'M'} },
+    { id: '12', edad: '18', peso: '14', raza: "Sanabria", sexo: {label: 'Macho', value: 'M'} }
   ]);
 
   function tarjetaVaca(vaca: Vaca) {
