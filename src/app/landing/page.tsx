@@ -1,6 +1,7 @@
 import "./landing.css"
 import Image from "next/image"
 import Vaca from "../../assets/images/vaca-patineta.jpg";
+import Footer from "../components/footer/footer";
 
 function Landing(){
     return (
@@ -44,6 +45,9 @@ function Landing(){
                 </div>
                 
             </section>
+
+            <Footer></Footer>
+
         </main>
     )
 }

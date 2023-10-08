@@ -8,7 +8,8 @@ import { useState } from "react";
 import { Modal, ModalContent, ModalBody, ModalHeader, ModalFooter } from "@nextui-org/modal";
 import { ListSelectItem } from "@/app/models/selectItem.model";
 import {Popover, PopoverTrigger, PopoverContent} from "@nextui-org/popover";
-
+import React from "react";
+import {Image} from "@nextui-org/react";
 
 export default function RegistroAnimales() {
 
@@ -24,6 +25,14 @@ export default function RegistroAnimales() {
     { id: '1', edad: '12', peso: '12', raza: "Sanabria", sexo: {label: 'Macho', value: 'M'} },
     { id: '2', edad: '14', peso: '14', raza: "Sanabria", sexo: {label: 'Macho', value: 'M'} },
     { id: '3', edad: '16', peso: '14', raza: "Sanabria", sexo: {label: 'Macho', value: 'M'} },
+    { id: '4', edad: '18', peso: '14', raza: "Sanabria", sexo: {label: 'Macho', value: 'M'} },
+    { id: '1', edad: '12', peso: '12', raza: "Sanabria", sexo: {label: 'Macho', value: 'M'} },
+    { id: '2', edad: '14', peso: '14', raza: "Sanabria", sexo: {label: 'Macho', value: 'M'} },
+    { id: '3', edad: '16', peso: '14', raza: "Sanabria", sexo: {label: 'Macho', value: 'M'} },
+    { id: '4', edad: '18', peso: '14', raza: "Sanabria", sexo: {label: 'Macho', value: 'M'} },
+    { id: '1', edad: '12', peso: '12', raza: "Sanabria", sexo: {label: 'Macho', value: 'M'} },
+    { id: '2', edad: '14', peso: '14', raza: "Sanabria", sexo: {label: 'Macho', value: 'M'} },
+    { id: '3', edad: '16', peso: '14', raza: "Sanabria", sexo: {label: 'Macho', value: 'M'} },
     { id: '4', edad: '18', peso: '14', raza: "Sanabria", sexo: {label: 'Macho', value: 'M'} }
   ]);
 
@@ -31,10 +40,11 @@ export default function RegistroAnimales() {
     return (
       <div className="card" key={vaca.id}>
         <section className="card-top-img">
-          <img
-            src="https://i.pinimg.com/564x/cf/4d/32/cf4d32d0b8cfc5ff947366c9be7a42d2.jpg"
-            alt="Imagen"
-          />
+        <Image
+          isZoomed
+          alt="NextUI Fruit Image with Zoom"
+          src="https://i.pinimg.com/564x/75/f7/37/75f737e49bcc08c6f1812e60407a4044.jpg"
+        />
         </section>
         <section className="card-content">
           <div className="flex gap-1">

@@ -32,6 +32,18 @@ export default function Nav() {
             Ingresar
           </Button>
         </NavbarItem>
+        <NavbarItem>
+          <div className="w-14">
+            <img className=" rounded-full" src="https://i.pinimg.com/564x/b0/47/6d/b0476df3a01539422497fdb3c8ff9c24.jpg" alt="" />
+          </div>
+            
+        </NavbarItem>
+        <NavbarItem>
+          <div className="gris">
+            <h3 className="font-medium">Airton Sampayo</h3>
+            <p className="text-sm">Trabajador</p>
+          </div>
+        </NavbarItem>
       </NavbarContent>
     </Navbar>
   );
