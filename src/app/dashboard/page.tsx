@@ -2,6 +2,7 @@
 import "./dashboard.css"
 import { useState } from "react";
 import RegistroAnimales from "./registro-animales/registro-animales";
+import RegistroTrabajadores from "./registro-trabajadores/registro-trabajadores";
 import Authenticated from "../services/user.service";
 export default function Dashboard(){
     
@@ -13,6 +14,7 @@ export default function Dashboard(){
 
     const modules: Modules = {
         1: <RegistroAnimales></RegistroAnimales>,
+        7: <RegistroTrabajadores></RegistroTrabajadores>
     }
 
     function changeTab(event: any) {
