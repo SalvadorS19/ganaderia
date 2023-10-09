@@ -1,3 +1,7 @@
+.main-container {
+    display: flex;
+    max-height: calc(100vh - 4rem);
+}
 
 .dashboard-aside {
     padding: 1rem;
@@ -45,6 +49,7 @@
 }
 
 .dashboard-tabview {
+    overflow: auto;
     padding: 2rem;
     background-image: url("../../assets/images/blob-scatter-haikei.svg");
     background-repeat: no-repeat;
