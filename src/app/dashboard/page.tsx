@@ -28,7 +28,7 @@ export default function Dashboard(){
 
     return (
         <Authenticated>
-            <main className="flex">
+            <main className="main-container">
                 <aside className="dashboard-aside">
                     <ul className="dashboard-modules">
                         <h2 className="dashboard-title">Modulos</h2>
