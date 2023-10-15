@@ -4,7 +4,7 @@ import { Input } from '@nextui-org/input';
 
 export default function Footer() {
     return (
-        <div className="footer">
+        <footer className="footer" id='footer'>
             <div className="container">
                 <div className="footer-items">
                     <ul className='footer-list'>
@@ -69,6 +69,6 @@ export default function Footer() {
                     </div>
                 </div>
             </div>
-        </div>
+        </footer>
     )
 }
