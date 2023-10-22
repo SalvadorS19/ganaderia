@@ -13,10 +13,12 @@ import {
   NavbarMenuToggle
 } from "@nextui-org/react";
 import Image from 'next/image'
+import { useAuth } from "@/app/services/auth.provider";
 
 export default function Nav() {
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { user: currentUser } = useAuth();
 
   const menuItems = [
     "Inicio",
@@ -24,6 +26,39 @@ export default function Nav() {
     "Contactanos",
     "Mi cuenta"
   ];
+
+  const ProfileItem = () => {
+    if (currentUser) {
+      return (
+        <NavbarItem className="flex">
+          <Image 
+            src="https://i.pinimg.com/564x/b0/47/6d/b0476df3a01539422497fdb3c8ff9c24.jpg"
+            alt="profile-picture"
+            height={40}
+            width={50}
+            className="rounded"
+          ></Image>
+          <div className="gris ml-2">
+            <h3 className="font-medium">Airton Sampayo</h3>
+            <p className="text-sm">Trabajador</p>
+          </div>
+        </NavbarItem>
+      )
+    } else {
+      return (
+        <NavbarItem>
+          <Button 
+            as={Link} 
+            color="secondary" 
+            href="login" 
+            variant="flat"
+          >
+            Ingresar
+          </Button>
+        </NavbarItem>
+      );
+    }
+  }
 
   return (
     <Navbar onMenuOpenChange={setIsMenuOpen}>
@@ -54,29 +89,7 @@ export default function Nav() {
             Contactanos
           </Link>
         </NavbarItem>
-        <NavbarItem>
-          <Button 
-            as={Link} 
-            color="secondary" 
-            href="login" 
-            variant="flat"
-          >
-            Ingresar
-          </Button>
-        </NavbarItem>
-        <NavbarItem className="flex">
-          <Image 
-            src="https://i.pinimg.com/564x/b0/47/6d/b0476df3a01539422497fdb3c8ff9c24.jpg"
-            alt="profile-picture"
-            height={40}
-            width={50}
-            className="rounded"
-          ></Image>
-          <div className="gris ml-2">
-            <h3 className="font-medium">Airton Sampayo</h3>
-            <p className="text-sm">Trabajador</p>
-          </div>
-        </NavbarItem>
+        <ProfileItem/>
       </NavbarContent>
       <NavbarMenu>
         {menuItems.map((item, index) => (

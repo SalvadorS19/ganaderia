@@ -3,7 +3,7 @@ import './login.css';
 import { Input } from "@nextui-org/input"
 import { Button } from "@nextui-org/button";
 import { Checkbox } from "@nextui-org/checkbox";
-import { useRouter } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useAuth } from '../services/auth.provider';
 
@@ -20,7 +20,7 @@ export default function Login() {
             && loginForm.clave === superUser.clave
         ) {
             login(superUser);
-            router.push('/dashboard');
+            redirect('/dashboard');
         }
     }
 
@@ -33,7 +33,7 @@ export default function Login() {
     }
     
     if (currentUser) {
-        return router.push('/dashboard');
+        redirect('/dashboard');
     }
     return (
         <section className="login-main">

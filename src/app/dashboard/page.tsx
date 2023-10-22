@@ -4,7 +4,7 @@ import { useState } from "react";
 import RegistroAnimales from "./registro-animales/registro-animales";
 import RegistroTrabajadores from "./registro-trabajadores/registro-trabajadores";
 import { useAuth } from "../services/auth.provider";
-import { useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 
 type Modulo = {
     [key: number]: JSX.Element;
@@ -14,7 +14,6 @@ export default function Dashboard(){
 
     const [tabviewId, setTabviewId] = useState(1);
     const {user: currentUser} = useAuth();
-    const router = useRouter();
 
     const modules: Modulo = {
         1: <RegistroAnimales></RegistroAnimales>,
@@ -31,7 +30,7 @@ export default function Dashboard(){
     }
     
     if (!currentUser) {
-        return router.push('/login');
+        redirect('/login');
     }
     return (
         <main className="main-container">
