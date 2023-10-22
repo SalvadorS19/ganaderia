@@ -5,19 +5,21 @@ import { Button } from "@nextui-org/button";
 import { Checkbox } from "@nextui-org/checkbox";
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { useAuth } from '../services/auth.provider';
 
 export default function Login() {
 
     const superUser = {usuario: 'admin', clave: 'admin'};
 
     const router = useRouter();
+    const {user: currentUser, login, logout} = useAuth();
     const [loginForm, setLoginForm] = useState({usuario: '', clave: ''});
     
-    function login() {
+    function ingresar() {
         if (loginForm.usuario === superUser.usuario 
             && loginForm.clave === superUser.clave
         ) {
-            localStorage.setItem('token', 'ADMIN');
+            login(superUser);
             router.push('/dashboard');
         }
     }
@@ -29,7 +31,10 @@ export default function Login() {
             [name]: value,
         }));
     }
-        
+    
+    if (currentUser) {
+        return router.push('/dashboard');
+    }
     return (
         <section className="login-main">
             <div className="login-container">
@@ -52,7 +57,7 @@ export default function Login() {
                         required
                     ></Input>
                     <Checkbox>Recordarme</Checkbox>
-                    <Button color="primary" onPress={login}>Ingresar</Button>
+                    <Button color="primary" onPress={ingresar}>Ingresar</Button>
                 </form>
             </div>
         </section>

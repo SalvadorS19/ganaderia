@@ -4,6 +4,7 @@ import { Poppins } from 'next/font/google'
 import { Providers } from './providers'
 import Nav from './components/nav/nav';
 import Footer from './components/footer/footer';
+import { AuthProvider } from './services/auth.provider';
 
 const poppins = Poppins(
   { weight: ['300','400', '500', '700', '800'],
@@ -26,10 +27,12 @@ export default function RootLayout({
         <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css"></link>
       </head>
       <body className={poppins.className}>
-        <Nav></Nav>
-        <Providers>
-          {children}
-        </Providers>
+        <AuthProvider>
+          <Nav></Nav>
+          <Providers>
+            {children}
+          </Providers>
+        </AuthProvider>
       </body>
     </html>
   )
