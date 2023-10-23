@@ -10,15 +10,23 @@ import {
   Button, 
   NavbarMenu,
   NavbarMenuItem,
-  NavbarMenuToggle
+  NavbarMenuToggle,
+  DropdownTrigger,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu
 } from "@nextui-org/react";
 import Image from 'next/image'
 import { useAuth } from "@/app/services/auth.provider";
+import { useRouter } from "next/navigation";
+
+
 
 export default function Nav() {
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { user: currentUser } = useAuth();
+  const { user: currentUser, login, logout } = useAuth();
+  const router= useRouter()
 
   const menuItems = [
     "Inicio",
@@ -27,23 +35,42 @@ export default function Nav() {
     "Mi cuenta"
   ];
 
+  function abrirDashboard(){
+    router.push("/dashboard")
+  }
+
   const ProfileItem = () => {
     if (currentUser) {
       return (
         <NavbarItem className="flex">
-          <Image 
-            src="https://i.pinimg.com/564x/b0/47/6d/b0476df3a01539422497fdb3c8ff9c24.jpg"
-            alt="profile-picture"
-            height={40}
-            width={50}
-            className="rounded"
-          ></Image>
-          <div className="gris ml-2">
-            <h3 className="font-medium">Airton Sampayo</h3>
-            <p className="text-sm">Trabajador</p>
-          </div>
+          <Dropdown>
+            <DropdownTrigger>
+              <div className="flex">
+                <Image
+                  src="https://i.pinimg.com/564x/b0/47/6d/b0476df3a01539422497fdb3c8ff9c24.jpg"
+                  alt="profile-picture"
+                  height={40}
+                  width={50}
+                  className="rounded"
+                ></Image>
+
+                <div className="gris ml-2">
+                  <h3 className="font-medium">Airton Sampayo</h3>
+                  <p className="text-sm">Trabajador</p>
+                </div>
+              </div>
+            </DropdownTrigger>
+            <DropdownMenu aria-label="Profile Actions" variant="flat">
+              <DropdownItem key="dashboard" onPress={abrirDashboard}>
+                Modulos
+              </DropdownItem>
+              <DropdownItem key="logout" color="danger" onPress={logout}>
+                Cerrar sesion
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
         </NavbarItem>
-      )
+      );
     } else {
       return (
         <NavbarItem>
