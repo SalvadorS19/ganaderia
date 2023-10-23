@@ -42,7 +42,7 @@ export default function Nav() {
   const ProfileItem = () => {
     if (currentUser) {
       return (
-        <NavbarItem className="flex">
+        <NavbarItem className="flex cursor-pointer">
           <Dropdown>
             <DropdownTrigger>
               <div className="flex">
