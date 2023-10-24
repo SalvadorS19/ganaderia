@@ -3,7 +3,7 @@ import Image from "next/image"
 import Vaca from "../../assets/images/vaca-patineta.jpg";
 import Footer from "../components/footer/footer";
 
-function Landing(){
+export default function Landing(){
     return (
         <main>
             <section className="banner">
@@ -41,15 +41,9 @@ function Landing(){
                             <a className="btn btn-secondary btn-style mt-5 me-2" href="#discover"> Leer más </a>
                         </div>
                     </div>
-                    
                 </div>
-                
             </section>
-
             <Footer></Footer>
-
         </main>
     )
 }
-
-export default Landing

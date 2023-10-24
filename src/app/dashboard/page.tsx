@@ -1,8 +1,8 @@
 'use client'
 import "./dashboard.css"
-import { useState } from "react";
 import RegistroAnimales from "./registro-animales/registro-animales";
 import RegistroTrabajadores from "./registro-trabajadores/registro-trabajadores";
+import { useState } from "react";
 import { useAuth } from "../services/auth.provider";
 import { redirect } from "next/navigation";
 

@@ -7,9 +7,8 @@ import { Select, SelectItem } from "@nextui-org/select";
 import { useState } from "react";
 import { Modal, ModalContent, ModalBody, ModalHeader, ModalFooter } from "@nextui-org/modal";
 import { ListSelectItem } from "@/app/models/selectItem.model";
-import {Popover, PopoverTrigger, PopoverContent} from "@nextui-org/popover";
-import React from "react";
-import {Image} from "@nextui-org/react";
+import { Popover, PopoverTrigger, PopoverContent } from "@nextui-org/popover";
+import { Image } from "@nextui-org/react";
 
 export default function RegistroAnimales() {
 
