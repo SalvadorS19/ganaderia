@@ -3,7 +3,6 @@ import type { Metadata } from 'next'
 import { Poppins } from 'next/font/google'
 import { Providers } from './providers'
 import Nav from './components/nav/nav';
-import Footer from './components/footer/footer';
 import { AuthProvider } from './services/auth.provider';
 
 const poppins = Poppins(

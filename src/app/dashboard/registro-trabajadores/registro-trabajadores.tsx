@@ -51,7 +51,7 @@ export default function RegistroTrabajadores() {
     if (visibleColumns === "all") return columns;
 
     return columns.filter((column) => Array.from(visibleColumns).includes(column.uid));
-  }, [visibleColumns]);
+  }, [visibleColumns, hasSearchFilter]);
 
   const filteredItems = useMemo(() => {
     let filteredUsers = [...users];

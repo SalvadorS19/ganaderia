@@ -11,7 +11,6 @@ export default function Login() {
 
     const superUser = {usuario: 'admin', clave: 'admin'};
 
-    const router = useRouter();
     const {user: currentUser, login, logout} = useAuth();
     const [loginForm, setLoginForm] = useState({usuario: '', clave: ''});
     

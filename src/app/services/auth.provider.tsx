@@ -1,14 +1,13 @@
 'use client'
-import { useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 import { Context, createContext, useContext, useEffect, useState } from "react"
 
 const AuthContext: Context<any> = createContext(null);
 
 export const useAuth = () => useContext(AuthContext);
 
-export const AuthProvider = ({children}: any) => {
+export const AuthProvider = ({children}: { children: React.ReactNode }) => {
     
-    const router = useRouter();
     const [ user, setUser ]: any = useState(null);
     const [ protectedRoute, setProtectedRoute]: [boolean, Function] = useState(false);
     const [ loading, setLoading]: [boolean, Function] = useState(true);
@@ -37,7 +36,7 @@ export const AuthProvider = ({children}: any) => {
 
     if (!loading) {
         if (protectedRoute && !user.token) {
-            return router.push('/login');
+            redirect('/login');
         } else {
             return (
                 <AuthContext.Provider value={{user, login, logout}}>
