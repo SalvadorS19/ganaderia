@@ -51,7 +51,7 @@ export default function RegistroTrabajadores() {
     if (visibleColumns === "all") return columns;
 
     return columns.filter((column) => Array.from(visibleColumns).includes(column.uid));
-  }, [visibleColumns, hasSearchFilter]);
+  }, [visibleColumns]);
 
   const filteredItems = useMemo(() => {
     let filteredUsers = [...users];
@@ -68,7 +68,7 @@ export default function RegistroTrabajadores() {
     }
 
     return filteredUsers;
-  }, [users, filterValue, statusFilter]);
+  }, [hasSearchFilter, filterValue, statusFilter]);
 
   const pages = Math.ceil(filteredItems.length / rowsPerPage);
 
