@@ -20,7 +20,7 @@ import {
   SortDescriptor
 } from "@nextui-org/react";
 import Icon from "@/app/components/icon/icon";
-import {columns, users, statusOptions} from "./data";
+import {columns, users, statusOptions} from "./trabajadores";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   activo: "success",
@@ -126,7 +126,6 @@ export default function RegistroTrabajadores() {
                 </Button>
               </DropdownTrigger>
               <DropdownMenu>
-                <DropdownItem>Ver</DropdownItem>
                 <DropdownItem>Editar</DropdownItem>
                 <DropdownItem>Eliminar</DropdownItem>
               </DropdownMenu>
