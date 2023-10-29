@@ -5,6 +5,7 @@ import RegistroTrabajadores from "./registro-trabajadores/registro-trabajadores"
 import { useState } from "react";
 import { useAuth } from "../services/auth.provider";
 import { redirect } from "next/navigation";
+import ControlInventario from "./control-inventario/control-inventario";
 
 type Modulo = {
     [key: number]: JSX.Element;
@@ -17,6 +18,7 @@ export default function Dashboard(){
 
     const modules: Modulo = {
         1: <RegistroAnimales></RegistroAnimales>,
+        2: <ControlInventario></ControlInventario>,
         7: <RegistroTrabajadores></RegistroTrabajadores>
     }
 
