@@ -84,12 +84,14 @@ export default function RegistroAnimales() {
   }
 
   function RegistroAnimal() {
+    const [submitted, setSubmitted]: [boolean, Function] = useState(false);
     const emptyVaca: Vaca = {id: '', peso: '', edad: '', raza: '', sexo: {label: '', value: ''}}
     const [vacaForm, setVacaForm]: [Vaca, Function] = useState(
       selectedVaca.id ? selectedVaca : emptyVaca
     );
 
     function onOpenChange(event: any) {
+      setSubmitted(false);
       setIsOpenRegistroAnimal(event);
     }
 
@@ -111,29 +113,36 @@ export default function RegistroAnimales() {
           break;
       }
     }
+
+    function formularioValido(): boolean {
+      return (vacaForm.edad && vacaForm.peso && vacaForm.raza && vacaForm.sexo?.value);
+    }
     
     function guardarVaca() {
-      if (!vacaForm.id) {
-        let idVaca;
-        if (vacas.length > 0) {
-          const ultimaVaca = vacas.reduce((anterior, actual) => {
-            return actual.id > anterior.id ? actual : anterior;
-          });
-          idVaca = ultimaVaca.id + 1;
-        } else {
-          idVaca = 1;
+      setSubmitted(true);
+      if (formularioValido()) {
+        if (!vacaForm.id) {
+          let idVaca;
+          if (vacas.length > 0) {
+            const ultimaVaca = vacas.reduce((anterior, actual) => {
+              return actual.id > anterior.id ? actual : anterior;
+            });
+            idVaca = ultimaVaca.id + 1;
+          } else {
+            idVaca = 1;
+          }
         }
+        
+        const indexVaca = vacas.findIndex(v => v.id === vacaForm.id);
+        let newVacas = [...vacas];
+        if (indexVaca != -1) {
+          newVacas[indexVaca] = vacaForm;
+          setVacas(newVacas); 
+        } else {
+          setVacas([...vacas, vacaForm]);
+        }
+        setIsOpenRegistroAnimal(false);
       }
-      
-      const indexVaca = vacas.findIndex(v => v.id === vacaForm.id);
-      let newVacas = [...vacas];
-      if (indexVaca != -1) {
-        newVacas[indexVaca] = vacaForm;
-        setVacas(newVacas); 
-      } else {
-        setVacas([...vacas, vacaForm]);
-      }
-      setIsOpenRegistroAnimal(false);
     }
 
     return (
@@ -153,6 +162,7 @@ export default function RegistroAnimales() {
                       label="Raza"
                       value={vacaForm.raza}
                       onChange={handleVacaForm}
+                      color={(!vacaForm.raza && submitted)? "danger" : "default"}
                       required
                     ></Input>
                     <Input
@@ -161,6 +171,7 @@ export default function RegistroAnimales() {
                       label="Edad (meses)"
                       value={vacaForm.edad}
                       onChange={handleVacaForm}
+                      color={(!vacaForm.edad && submitted)? "danger" : "default"}
                       required
                     ></Input>
                     <Input
@@ -169,6 +180,7 @@ export default function RegistroAnimales() {
                       label="Peso (kg)"
                       value={vacaForm.peso}
                       onChange={handleVacaForm}
+                      color={(!vacaForm.peso && submitted)? "danger" : "default"}
                       required
                     ></Input>
                     <Select 
@@ -176,6 +188,7 @@ export default function RegistroAnimales() {
                       name="sexo"
                       selectedKeys={vacaForm.sexo?.value}
                       onChange={handleVacaForm}
+                      color={(!vacaForm.sexo?.value && submitted)? "danger" : "default"}
                       label="Seleccione el sexo"
                     >
                       {sexoItems.map((sexo) => (
