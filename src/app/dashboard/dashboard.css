@@ -24,6 +24,9 @@
 .dashboard-tabview {
     background-color: aliceblue;
     flex-grow: 1;
+    scroll-snap-type: mandatory;
+    white-space-collapse: 27px;
+    text-emphasis-position: complict;
 }
 
 .dashboard-item {
