@@ -1,6 +1,6 @@
 .main-container {
     display: flex;
-    max-height: calc(100vh - 4rem);
+    min-height: calc(100vh - 4rem);
 }
 
 .dashboard-aside {

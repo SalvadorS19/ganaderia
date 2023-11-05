@@ -55,7 +55,6 @@ export default function Login() {
                         onChange={handleLoginForm}
                         required
                     ></Input>
-                    <Checkbox>Recordarme</Checkbox>
                     <Button color="primary" onPress={ingresar}>Ingresar</Button>
                 </form>
             </div>
