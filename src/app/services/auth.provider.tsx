@@ -1,6 +1,8 @@
 'use client'
 import { redirect } from "next/navigation";
 import { Context, createContext, useContext, useEffect, useState } from "react"
+import { UsuarioModel } from "../models/usuario.model";
+import { AppUsers } from "../dashboard/registro-trabajadores/trabajadores";
 
 const AuthContext: Context<any> = createContext(null);
 
@@ -8,15 +10,15 @@ export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({children}: { children: React.ReactNode }) => {
     
-    const [ user, setUser ]: any = useState(null);
+    const [ user, setUser ]: [UsuarioModel | null, Function] = useState(null);
     const [ protectedRoute, setProtectedRoute]: [boolean, Function] = useState(false);
     const [ loading, setLoading]: [boolean, Function] = useState(true);
 
     useEffect(() => {
-        const superUser = {usuario: 'admin', clave: 'admin'};
         const token = localStorage.getItem('token');
         if (token) {
-            setUser(superUser);
+            const user = AppUsers.find((user: UsuarioModel) => user.username === token);
+            setUser(user);
             setLoading(false);
         } else {
             setLoading(false);
@@ -26,7 +28,7 @@ export const AuthProvider = ({children}: { children: React.ReactNode }) => {
 
     const login = (user: any) => {
         setUser(user);
-        localStorage.setItem('token', 'ADMIN');
+        localStorage.setItem('token', user.username);
     }
 
     const logout = () => {
@@ -35,7 +37,7 @@ export const AuthProvider = ({children}: { children: React.ReactNode }) => {
     }
 
     if (!loading) {
-        if (protectedRoute && !user.token) {
+        if (protectedRoute && !user) {
             redirect('/login');
         } else {
             return (

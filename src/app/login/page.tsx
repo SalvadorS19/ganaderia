@@ -2,23 +2,20 @@
 import './login.css';
 import { Input } from "@nextui-org/input"
 import { Button } from "@nextui-org/button";
-import { Checkbox } from "@nextui-org/checkbox";
-import { redirect, useRouter } from 'next/navigation';
+import { redirect } from 'next/navigation';
 import { useState } from 'react';
 import { useAuth } from '../services/auth.provider';
+import { UsuarioModel } from '../models/usuario.model';
+import { AppUsers } from '../dashboard/registro-trabajadores/trabajadores';
 
 export default function Login() {
-
-    const superUser = {usuario: 'admin', clave: 'admin'};
-
     const {user: currentUser, login, logout} = useAuth();
     const [loginForm, setLoginForm] = useState({usuario: '', clave: ''});
     
     function ingresar() {
-        if (loginForm.usuario === superUser.usuario 
-            && loginForm.clave === superUser.clave
-        ) {
-            login(superUser);
+        const user = AppUsers.find((user: UsuarioModel) => user.username === loginForm.usuario);
+        if (user) {
+            login(user);
             redirect('/dashboard');
         }
     }

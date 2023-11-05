@@ -1,26 +1,15 @@
-import { useCallback, useMemo, useState } from "react";
-import {
-  Table,
-  TableHeader,
-  TableColumn,
-  TableBody,
-  TableRow,
-  TableCell,
-  Input,
-  Button,
-  DropdownTrigger,
-  Dropdown,
-  DropdownMenu,
-  DropdownItem,
-  Chip,
-  User,
-  Pagination,
-  Selection,
-  ChipProps,
-  SortDescriptor
-} from "@nextui-org/react";
 import Icon from "@/app/components/icon/icon";
-import {columns, users, statusOptions} from "./trabajadores";
+import { Button } from "@nextui-org/button"
+import { Chip, ChipProps } from "@nextui-org/chip"
+import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@nextui-org/dropdown"
+import { Input } from "@nextui-org/input"
+import { Pagination } from "@nextui-org/pagination"
+import { Table, TableHeader, TableBody, TableColumn, TableRow, TableCell, Selection, SortDescriptor } from "@nextui-org/table"
+import { useCallback, useMemo, useState } from "react";
+import { User } from "@nextui-org/user"
+import { UsuarioModel } from "@/app/models/usuario.model";
+import {AppUsers, columns, statusOptions} from "./trabajadores";
+
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   activo: "success",
@@ -28,11 +17,13 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
   vacaciones: "warning",
 };
 
-const INITIAL_VISIBLE_COLUMNS = ["name", "role", "status", "actions"];
+const INITIAL_VISIBLE_COLUMNS = ["name", "username", "role", "status", "actions"];
 
-type User = typeof users[0];
+type User = typeof AppUsers[0];
 
 export default function RegistroTrabajadores() {
+
+  const [tableUsers, setTableUsers] = useState([...AppUsers]);
   const [filterValue, setFilterValue] = useState("");
   const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
   const [visibleColumns, setVisibleColumns] = useState<Selection>(new Set(INITIAL_VISIBLE_COLUMNS));
@@ -54,7 +45,7 @@ export default function RegistroTrabajadores() {
   }, [visibleColumns]);
 
   const filteredItems = useMemo(() => {
-    let filteredUsers = [...users];
+    let filteredUsers = [...tableUsers];
 
     if (hasSearchFilter) {
       filteredUsers = filteredUsers.filter((user) =>
@@ -68,7 +59,7 @@ export default function RegistroTrabajadores() {
     }
 
     return filteredUsers;
-  }, [hasSearchFilter, filterValue, statusFilter]);
+  }, [hasSearchFilter, filterValue, statusFilter, tableUsers]);
 
   const pages = Math.ceil(filteredItems.length / rowsPerPage);
 
@@ -91,7 +82,6 @@ export default function RegistroTrabajadores() {
 
   const renderCell = useCallback((user: User, columnKey: React.Key) => {
     const cellValue = user[columnKey as keyof User];
-    console.log(cellValue, user)
     switch (columnKey) {
       case "name":
         return (
@@ -122,11 +112,11 @@ export default function RegistroTrabajadores() {
             <Dropdown>
               <DropdownTrigger>
                 <Button isIconOnly size="sm" variant="light">
-                    <Icon  name="ellipsis-v"></Icon>
+                    <Icon name="ellipsis-v"></Icon>
                 </Button>
               </DropdownTrigger>
               <DropdownMenu>
-                <DropdownItem>Editar</DropdownItem>
+                <DropdownItem aria-label="Editar">Editar</DropdownItem>
                 <DropdownItem>Eliminar</DropdownItem>
               </DropdownMenu>
             </Dropdown>
@@ -230,7 +220,7 @@ export default function RegistroTrabajadores() {
           </div>
         </div>
         <div className="flex justify-between items-center">
-          <span className="text-small">Total: {users.length} Usuarios</span>
+          <span className="text-small">Total: {tableUsers.length} Usuarios</span>
         </div>
       </div>
     );
@@ -238,6 +228,7 @@ export default function RegistroTrabajadores() {
     onClear,
     filterValue,
     statusFilter,
+    tableUsers,
     visibleColumns,
     onSearchChange,
   ]);

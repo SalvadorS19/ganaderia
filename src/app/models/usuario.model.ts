@@ -1,6 +1,7 @@
 export interface UsuarioModel {
     id: number;
     name: string;
+    username: string;
     role: string;
     team: string;
     status: string;
