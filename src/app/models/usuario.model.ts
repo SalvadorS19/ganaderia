@@ -1,6 +1,10 @@
 export interface UsuarioModel {
     id: number;
-    nombreUsuario: string;
-    cargo: string;
-    estado: string;
+    name: string;
+    role: string;
+    team: string;
+    status: string;
+    age: number | string;
+    avatar: string;
+    email: string;
 }

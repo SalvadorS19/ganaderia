@@ -20,7 +20,7 @@ import {
   SortDescriptor
 } from "@nextui-org/react";
 import Icon from "@/app/components/icon/icon";
-import {columns, users, statusOptions} from "./trabajadores";
+import {columns, users, statusOptions} from "./data";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   activo: "success",
@@ -28,18 +28,18 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
   vacaciones: "warning",
 };
 
-const INITIAL_VISIBLE_COLUMNS = ["name", "role", "status", "actions"];
+const INITIAL_VISIBLE_COLUMNS = ["name", "type", "amount", "expiration", "supplier", "actions"];
 
 type User = typeof users[0];
 
-export default function RegistroTrabajadores() {
+export default function ControlInventario() {
   const [filterValue, setFilterValue] = useState("");
   const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
   const [visibleColumns, setVisibleColumns] = useState<Selection>(new Set(INITIAL_VISIBLE_COLUMNS));
   const [statusFilter, setStatusFilter] = useState<Selection>("all");
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
-    column: "age",
+    column: "type",
     direction: "ascending",
   });
 
@@ -97,17 +97,16 @@ export default function RegistroTrabajadores() {
         return (
           <User
             avatarProps={{radius: "lg", src: user.avatar}}
-            description={user.email}
+            description={user.supplier}
             name={cellValue}
           >
-            {user.email}
           </User>
         );
-      case "role":
+      case "amount":
         return (
           <div className="flex flex-col">
             <p className="text-bold text-small capitalize">{cellValue}</p>
-            <p className="text-bold text-tiny capitalize text-default-400">{user.team}</p>
+            <p className="text-bold text-tiny capitalize text-default-400"></p>
           </div>
         );
       case "status":
@@ -126,6 +125,7 @@ export default function RegistroTrabajadores() {
                 </Button>
               </DropdownTrigger>
               <DropdownMenu>
+                <DropdownItem>Ver</DropdownItem>
                 <DropdownItem>Editar</DropdownItem>
                 <DropdownItem>Eliminar</DropdownItem>
               </DropdownMenu>
@@ -185,7 +185,7 @@ export default function RegistroTrabajadores() {
             <Dropdown>
               <DropdownTrigger className="hidden sm:flex">
                 <Button endContent={<Icon  name="angle-down"></Icon>} variant="flat">
-                  Estado
+                  Tipo
                 </Button>
               </DropdownTrigger>
               <DropdownMenu
@@ -225,12 +225,12 @@ export default function RegistroTrabajadores() {
               </DropdownMenu>
             </Dropdown>
             <Button color="primary" endContent={<Icon  name="plus"></Icon>}>
-              Añadir Trabajador
+              Añadir Material
             </Button>
           </div>
         </div>
         <div className="flex justify-between items-center">
-          <span className="text-small">Total: {users.length} Usuarios</span>
+          <span className="text-small">Total: {users.length} Materiales</span>
         </div>
       </div>
     );
