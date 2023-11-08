@@ -10,7 +10,7 @@ export default function Landing(){
                 <div className="banner-container">
                     <div className="banner-container-two">
                         <div className="banner-container-info">
-                            <h2 className="banner-title">Bienestar que se saborea.</h2>
+                            <h2 className="banner-title">Bienestar que se saborea..</h2>
                             <p className="banner-text">
                                 Nos comprometemos a brindar un entorno enriquecedor y cuidados expertos, 
                                 garantizando la salud y felicidad de nuestros animales. 
