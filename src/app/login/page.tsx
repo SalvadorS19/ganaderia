@@ -5,21 +5,30 @@ import { Button } from "@nextui-org/button";
 import { redirect } from 'next/navigation';
 import { useState } from 'react';
 import { useAuth } from '../services/auth.provider';
-import { UsuarioModel } from '../models/usuario.model';
-import { AppUsers } from '../dashboard/registro-trabajadores/trabajadores';
+import { API_METHODS, POST } from '../util/fetching';
 
 export default function Login() {
+
     const {user: currentUser, login, logout} = useAuth();
     const [loginForm, setLoginForm] = useState({usuario: '', clave: ''});
     
-    function ingresar() {
-        const user = AppUsers.find((user: UsuarioModel) => user.username === loginForm.usuario);
-        if (user) {
-            login(user);
-            redirect('/dashboard');
-        }
+    const ingresar = async () => {
+        const body = JSON.stringify({
+            username: loginForm.usuario,
+            password: loginForm.clave
+        })
+        fetch(API_METHODS.user.login, {...POST, body})
+            .then((response) => response.json())
+            .then((data) => {
+                localStorage.setItem('token', data.token);
+                login(data.usuario);
+                redirect("/dashboard");
+            }
+        ).catch(
+            (error) => console.log(error)
+        );;
     }
-
+    
     function handleLoginForm(event: any) {
         const {name, value} = event.target;
         setLoginForm((prevFormData) => ({
