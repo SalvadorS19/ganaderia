@@ -2,27 +2,33 @@
 import './login.css';
 import { Input } from "@nextui-org/input"
 import { Button } from "@nextui-org/button";
-import { Checkbox } from "@nextui-org/checkbox";
-import { redirect, useRouter } from 'next/navigation';
+import { redirect } from 'next/navigation';
 import { useState } from 'react';
 import { useAuth } from '../services/auth.provider';
+import { API_METHODS, POST } from '../util/fetching';
 
 export default function Login() {
-
-    const superUser = {usuario: 'admin', clave: 'admin'};
 
     const {user: currentUser, login, logout} = useAuth();
     const [loginForm, setLoginForm] = useState({usuario: '', clave: ''});
     
-    function ingresar() {
-        if (loginForm.usuario === superUser.usuario 
-            && loginForm.clave === superUser.clave
-        ) {
-            login(superUser);
-            redirect('/dashboard');
-        }
+    const ingresar = async () => {
+        const body = JSON.stringify({
+            username: loginForm.usuario,
+            password: loginForm.clave
+        })
+        fetch(API_METHODS.user.login, {...POST, body})
+            .then((response) => response.json())
+            .then((data) => {
+                localStorage.setItem('token', data.token);
+                login(data.usuario);
+                redirect("/dashboard");
+            }
+        ).catch(
+            (error) => console.log(error)
+        );;
     }
-
+    
     function handleLoginForm(event: any) {
         const {name, value} = event.target;
         setLoginForm((prevFormData) => ({

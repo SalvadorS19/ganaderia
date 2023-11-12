@@ -1,6 +1,7 @@
 'use client'
 import { redirect } from "next/navigation";
 import { Context, createContext, useContext, useEffect, useState } from "react"
+import { API_METHODS, POST } from "../util/fetching";
 
 const AuthContext: Context<any> = createContext(null);
 
@@ -13,29 +14,42 @@ export const AuthProvider = ({children}: { children: React.ReactNode }) => {
     const [ loading, setLoading]: [boolean, Function] = useState(true);
 
     useEffect(() => {
-        const superUser = {usuario: 'admin', clave: 'admin'};
         const token = localStorage.getItem('token');
         if (token) {
-            setUser(superUser);
-            setLoading(false);
+            fetch(API_METHODS.user.checkToken + token)
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log(data);
+                    setUser(data.usuario)
+                    setLoading(false);
+                }
+            ).catch(
+                (error) => console.log(error)
+            );
         } else {
             setLoading(false);
         }
     }, [])
-    
 
     const login = (user: any) => {
         setUser(user);
-        localStorage.setItem('token', 'ADMIN');
     }
 
     const logout = () => {
-        setUser(null);
-        localStorage.removeItem('token');
+        fetch(API_METHODS.user.logout + user.id, {...POST})
+            .then((response) => response.text())
+            .then((data) => {
+                console.log(data);
+                localStorage.removeItem('token');
+                setUser(null);
+            }
+        ).catch(
+            (error) => console.log(error)
+        );
     }
 
     if (!loading) {
-        if (protectedRoute && !user.token) {
+        if (protectedRoute && user.id) {
             redirect('/login');
         } else {
             return (
