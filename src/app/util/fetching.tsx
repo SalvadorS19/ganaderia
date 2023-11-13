@@ -17,5 +17,8 @@ export const API_METHODS = {
         login: `${API_URL}/login`,
         checkToken: `${API_URL}/checkToken/`,
         logout: `${API_URL}/logout/`
+    },
+    articulo: {
+        default: `${API_URL}/articulo`
     }
 }

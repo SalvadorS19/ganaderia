@@ -2,7 +2,7 @@ import React from "react";
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@nextui-org/modal";
 import { Button } from "@nextui-org/button";
 
-export default function EliminarTrabajador({isOpen, onOpenChange}: any) {
+export default function EliminarArticulo({isOpen, onOpenChange}: any) {
 
   return (
     <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
@@ -12,7 +12,7 @@ export default function EliminarTrabajador({isOpen, onOpenChange}: any) {
             <ModalHeader className="flex flex-col gap-1">Confirmación requerida</ModalHeader>
             <ModalBody>
               <p> 
-                ¿Está seguro de eliminar el usuario?
+                ¿Está seguro de eliminar el articulo?
               </p>
             </ModalBody>
             <ModalFooter>
