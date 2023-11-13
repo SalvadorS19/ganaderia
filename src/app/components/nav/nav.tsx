@@ -47,7 +47,7 @@ export default function Nav() {
             <DropdownTrigger>
               <div className="flex">
                 <Image
-                  src="https://i.pinimg.com/564x/b0/47/6d/b0476df3a01539422497fdb3c8ff9c24.jpg"
+                  src={ currentUser.avatar }
                   alt="profile-picture"
                   height={40}
                   width={50}
@@ -55,8 +55,8 @@ export default function Nav() {
                 ></Image>
 
                 <div className="gris ml-2">
-                  <h3 className="font-medium">Airton Sampayo</h3>
-                  <p className="text-sm">Trabajador</p>
+                  <h3 className="font-medium">{ currentUser.name }</h3>
+                  <p className="text-sm">{ currentUser.role }</p>
                 </div>
               </div>
             </DropdownTrigger>

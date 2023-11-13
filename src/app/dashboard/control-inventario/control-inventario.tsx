@@ -21,6 +21,8 @@ import {
 } from "@nextui-org/react";
 import Icon from "@/app/components/icon/icon";
 import {columns, users, statusOptions} from "./data";
+import EliminarArticulo from "./eliminar-articulo/eliminar-articulo";
+import EditarArticulo from "./editar-articulo/editar-articulo";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   activo: "success",
@@ -33,6 +35,9 @@ const INITIAL_VISIBLE_COLUMNS = ["name", "type", "amount", "expiration", "suppli
 type User = typeof users[0];
 
 export default function ControlInventario() {
+
+  const [eliminarArticuloIsOpen, setEliminarArticuloIsOpen] = useState(false);
+  const [editarArticuloIsOpen, setEditarArticuloIsOpen] = useState(false);
   const [filterValue, setFilterValue] = useState("");
   const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
   const [visibleColumns, setVisibleColumns] = useState<Selection>(new Set(INITIAL_VISIBLE_COLUMNS));
@@ -125,9 +130,12 @@ export default function ControlInventario() {
                 </Button>
               </DropdownTrigger>
               <DropdownMenu>
-                <DropdownItem>Ver</DropdownItem>
-                <DropdownItem>Editar</DropdownItem>
-                <DropdownItem>Eliminar</DropdownItem>
+                <DropdownItem
+                  onPress={()=> editarArticuloOpenChange(true)}
+                >Editar</DropdownItem>
+                <DropdownItem
+                  onPress={()=> eliminarArticuloOpenChange(true)}
+                >Eliminar</DropdownItem>
               </DropdownMenu>
             </Dropdown>
           </div>
@@ -224,7 +232,11 @@ export default function ControlInventario() {
                 ))}
               </DropdownMenu>
             </Dropdown>
-            <Button color="primary" endContent={<Icon  name="plus"></Icon>}>
+            <Button 
+              onPress={()=> editarArticuloOpenChange(true)}
+              color="primary" 
+              endContent={<Icon  name="plus"></Icon>}
+            >
               Añadir Material
             </Button>
           </div>
@@ -258,9 +270,17 @@ export default function ControlInventario() {
     );
   }, [page, pages]);
 
-  return (
-    <Table
+  function eliminarArticuloOpenChange(event: any) {
+    setEliminarArticuloIsOpen(event);
+  }
 
+  function editarArticuloOpenChange(event: any) {
+    setEditarArticuloIsOpen(event);
+  }
+
+  return (
+    <>
+    <Table
       aria-label="Example table with custom cells, pagination and sorting"
       isHeaderSticky
       bottomContent={bottomContent}
@@ -268,12 +288,11 @@ export default function ControlInventario() {
       classNames={{
         wrapper: "max-h-[641px]",
       }}
-
       sortDescriptor={sortDescriptor}
       topContent={topContent}
       topContentPlacement="outside"
       onSortChange={setSortDescriptor}
-    >
+      >
       <TableHeader columns={headerColumns}>
         {(column) => (
           <TableColumn
@@ -292,6 +311,15 @@ export default function ControlInventario() {
           </TableRow>
         )}
       </TableBody>
-    </Table>
+      </Table>
+      <EditarArticulo
+        isOpen={editarArticuloIsOpen}
+        onOpenChange={editarArticuloOpenChange}
+      ></EditarArticulo>
+      <EliminarArticulo
+        isOpen={eliminarArticuloIsOpen}
+        onOpenChange={eliminarArticuloOpenChange}
+      ></EliminarArticulo>
+    </>
   );
 }
