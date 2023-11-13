@@ -26,7 +26,7 @@ export default function Login() {
             }
         ).catch(
             (error) => console.log(error)
-        );;
+        );
     }
     
     function handleLoginForm(event: any) {
