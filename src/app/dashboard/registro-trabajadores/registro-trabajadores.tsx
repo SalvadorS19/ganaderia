@@ -7,8 +7,9 @@ import { Pagination } from "@nextui-org/pagination"
 import { Table, TableHeader, TableBody, TableColumn, TableRow, TableCell, Selection, SortDescriptor } from "@nextui-org/table"
 import { useCallback, useMemo, useState } from "react";
 import { User } from "@nextui-org/user"
-import { UsuarioModel } from "@/app/models/usuario.model";
-import {AppUsers, columns, statusOptions} from "./trabajadores";
+import { AppUsers, columns, statusOptions } from "./trabajadores";
+import { API_METHODS } from "@/app/util/fetching";
+import useSWR from "swr";
 
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
@@ -17,13 +18,20 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
   vacaciones: "warning",
 };
 
+interface TableUsersData {
+  data: any[];
+  error: any;
+  isLoading: any;
+}
+
 const INITIAL_VISIBLE_COLUMNS = ["name", "username", "role", "status", "actions"];
+
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 type User = typeof AppUsers[0];
 
 export default function RegistroTrabajadores() {
 
-  const [tableUsers, setTableUsers] = useState([...AppUsers]);
   const [filterValue, setFilterValue] = useState("");
   const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
   const [visibleColumns, setVisibleColumns] = useState<Selection>(new Set(INITIAL_VISIBLE_COLUMNS));
@@ -33,10 +41,16 @@ export default function RegistroTrabajadores() {
     column: "age",
     direction: "ascending",
   });
-
   const [page, setPage] = useState(1);
 
+  const { data, error, isLoading }: TableUsersData  = useSWR(
+    API_METHODS.user.default,
+    fetcher
+  );
+
   const hasSearchFilter = Boolean(filterValue);
+
+  const loadingState = isLoading || data.length === 0 ? "loading" : "idle";
 
   const headerColumns = useMemo(() => {
     if (visibleColumns === "all") return columns;
@@ -45,39 +59,45 @@ export default function RegistroTrabajadores() {
   }, [visibleColumns]);
 
   const filteredItems = useMemo(() => {
-    let filteredUsers = [...tableUsers];
+    if (data) {
+      let filteredUsers = [...data];
 
-    if (hasSearchFilter) {
-      filteredUsers = filteredUsers.filter((user) =>
-        user.name.toLowerCase().includes(filterValue.toLowerCase()),
-      );
+      if (hasSearchFilter) {
+        filteredUsers = filteredUsers.filter((user) =>
+          user.name.toLowerCase().includes(filterValue.toLowerCase()),
+        );
+      }
+      if (statusFilter !== "all" && Array.from(statusFilter).length !== statusOptions.length) {
+        filteredUsers = filteredUsers.filter((user) =>
+          Array.from(statusFilter).includes(user.status),
+        );
+      }
+
+      return filteredUsers;
     }
-    if (statusFilter !== "all" && Array.from(statusFilter).length !== statusOptions.length) {
-      filteredUsers = filteredUsers.filter((user) =>
-        Array.from(statusFilter).includes(user.status),
-      );
-    }
-
-    return filteredUsers;
-  }, [hasSearchFilter, filterValue, statusFilter, tableUsers]);
-
-  const pages = Math.ceil(filteredItems.length / rowsPerPage);
+  }, [hasSearchFilter, filterValue, statusFilter, data]);
+  
+  const pages = filteredItems? Math.ceil(filteredItems.length / rowsPerPage) : 1;
 
   const items = useMemo(() => {
-    const start = (page - 1) * rowsPerPage;
-    const end = start + rowsPerPage;
+    if (filteredItems) {
+      const start = (page - 1) * rowsPerPage;
+      const end = start + rowsPerPage;
 
-    return filteredItems.slice(start, end);
+      return filteredItems.slice(start, end);
+    }
   }, [page, filteredItems, rowsPerPage]);
 
   const sortedItems = useMemo(() => {
-    return [...items].sort((a: User, b: User) => {
-      const first = a[sortDescriptor.column as keyof User] as number;
-      const second = b[sortDescriptor.column as keyof User] as number;
-      const cmp = first < second ? -1 : first > second ? 1 : 0;
-
-      return sortDescriptor.direction === "descending" ? -cmp : cmp;
-    });
+    if (items) {
+      return [...items].sort((a: User, b: User) => {
+        const first = a[sortDescriptor.column as keyof User] as number;
+        const second = b[sortDescriptor.column as keyof User] as number;
+        const cmp = first < second ? -1 : first > second ? 1 : 0;
+  
+        return sortDescriptor.direction === "descending" ? -cmp : cmp;
+      });
+    }
   }, [sortDescriptor, items]);
 
   const renderCell = useCallback((user: User, columnKey: React.Key) => {
@@ -125,23 +145,6 @@ export default function RegistroTrabajadores() {
       default:
         return cellValue;
     }
-  }, []);
-
-  const onNextPage = useCallback(() => {
-    if (page < pages) {
-      setPage(page + 1);
-    }
-  }, [page, pages]);
-
-  const onPreviousPage = useCallback(() => {
-    if (page > 1) {
-      setPage(page - 1);
-    }
-  }, [page]);
-
-  const onRowsPerPageChange = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
-    setRowsPerPage(Number(e.target.value));
-    setPage(1);
   }, []);
 
   const onSearchChange = useCallback((value?: string) => {
@@ -220,15 +223,15 @@ export default function RegistroTrabajadores() {
           </div>
         </div>
         <div className="flex justify-between items-center">
-          <span className="text-small">Total: {tableUsers.length} Usuarios</span>
+          <span className="text-small">Total: {data?.length} Usuarios</span>
         </div>
       </div>
     );
   }, [
     onClear,
     filterValue,
+    data,
     statusFilter,
-    tableUsers,
     visibleColumns,
     onSearchChange,
   ]);
@@ -249,9 +252,12 @@ export default function RegistroTrabajadores() {
     );
   }, [page, pages]);
 
+  if (!data) {
+    return "Loading...";
+  }
+
   return (
     <Table
-
       aria-label="Example table with custom cells, pagination and sorting"
       isHeaderSticky
       bottomContent={bottomContent}
@@ -276,7 +282,7 @@ export default function RegistroTrabajadores() {
           </TableColumn>
         )}
       </TableHeader>
-      <TableBody emptyContent={"No users found"} items={sortedItems}>
+      <TableBody emptyContent={"No users found"} items={sortedItems} loadingState={loadingState}>
         {(item) => (
           <TableRow key={item.id}>
             {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}

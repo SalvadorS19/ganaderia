@@ -9,6 +9,7 @@ export const POST: RequestInit = {
 
 export const API_METHODS = {
     user: {
+        default: `${API_URL}/user`,
         login: `${API_URL}/login`,
         checkToken: `${API_URL}/checkToken/`,
         logout: `${API_URL}/logout/`
