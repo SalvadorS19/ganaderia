@@ -1,19 +1,22 @@
 import Icon from "@/app/components/icon/icon";
+import TrabajadorModal from "./trabajador-modal/trabajador-modal";
+import EliminarTrabajador from "./eliminar-trabajador-modal/eliminar-trabajador-modal";
+
 import { Button } from "@nextui-org/button"
 import { Chip, ChipProps } from "@nextui-org/chip"
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@nextui-org/dropdown"
 import { Input } from "@nextui-org/input"
 import { Pagination } from "@nextui-org/pagination"
 import { Table, TableHeader, TableBody, TableColumn, TableRow, TableCell, Selection, SortDescriptor } from "@nextui-org/table"
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { User } from "@nextui-org/user"
 import { columns, statusOptions } from "./trabajadores";
-import { API_METHODS, GetFetch } from "@/app/util/fetching";
-import useSWR from "swr";
+import { API_METHODS } from "@/app/util/fetching";
 import { UsuarioModel } from "@/app/models/usuario.model";
-import TrabajadorModal from "./trabajador-modal/trabajador-modal";
-import EliminarTrabajador from "./eliminar-trabajador-modal/eliminar-trabajador-modal";
-import { ModalState } from "@/app/models/modalState.model";
+import { InitialModalState, ModalState } from "@/app/models/modalState.model";
+import { TableState } from "@/app/models/tableState.model";
+import { Spinner } from "@nextui-org/spinner";
+
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   activo: "success",
@@ -21,19 +24,14 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
   vacaciones: "warning",
 };
 
-interface TableUsersData {
-  data: any[];
-  error: any;
-  isLoading: any;
-}
-
 const INITIAL_VISIBLE_COLUMNS = ["name", "username", "role", "status", "actions"];
 
 export default function RegistroTrabajadores() {
 
+  const [tableState, setTableState]: [TableState, Function] = useState({isLoading: true, data: []});
   const [filterValue, setFilterValue] = useState("");
-  const [isOpenTrabajadorModal, setIsOpenTrabajadorModal] = useState(false);
-  const [isOpenEliminarTrabajador, setIsOpenEliminarTrabajador] = useState(false);
+  const [trabajadorModalState, setTrabajadorModalState]: [ModalState, Function] = useState(InitialModalState);
+  const [eliminarModalState, setEliminarModalState]: [ModalState, Function] = useState(InitialModalState);
   const [visibleColumns, setVisibleColumns] = useState<Selection>(new Set(INITIAL_VISIBLE_COLUMNS));
   const [statusFilter, setStatusFilter] = useState<Selection>("all");
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -43,14 +41,30 @@ export default function RegistroTrabajadores() {
   });
   const [page, setPage] = useState(1);
 
-  const { data, error, isLoading }: TableUsersData  = useSWR(
-    API_METHODS.user.default,
-    GetFetch
-  );
+  const loadTable = async () => {
+    await fetch(API_METHODS.user.default)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        const status = { isLoading: false, data }
+        setTableState(status);
+      }
+    ).catch((error) => console.log(error));
+  }
+
+  const reloadTable = () => {
+    const status = { isLoading: true, data: []}
+    setTableState(status);
+    loadTable();
+  }
+
+  useEffect(() => {
+    loadTable();
+  }, [])
 
   const hasSearchFilter = Boolean(filterValue);
 
-  const loadingState = isLoading || data.length === 0 ? "loading" : "idle";
+  const loadingState = tableState.isLoading ? "loading" : "idle";
 
   const headerColumns = useMemo(() => {
     if (visibleColumns === "all") return columns;
@@ -59,8 +73,8 @@ export default function RegistroTrabajadores() {
   }, [visibleColumns]);
 
   const filteredItems = useMemo(() => {
-    if (data) {
-      let filteredUsers = [...data];
+    if (tableState.data) {
+      let filteredUsers = [...tableState.data];
 
       if (hasSearchFilter) {
         filteredUsers = filteredUsers.filter((user) =>
@@ -75,7 +89,7 @@ export default function RegistroTrabajadores() {
 
       return filteredUsers;
     }
-  }, [hasSearchFilter, filterValue, statusFilter, data]);
+  }, [hasSearchFilter, filterValue, statusFilter, tableState.data]);
   
   const pages = filteredItems? Math.ceil(filteredItems.length / rowsPerPage) : 1;
 
@@ -138,10 +152,10 @@ export default function RegistroTrabajadores() {
               <DropdownMenu>
                 <DropdownItem 
                   aria-label="Editar" 
-                  onPress={()=> setIsOpenTrabajadorModal(true)}
+                  onPress={() => showTrabajadorModal(user)}
                 >Editar</DropdownItem>
                 <DropdownItem 
-                  onPress={()=> setIsOpenEliminarTrabajador(true)}
+                  onPress={() => showEliminarTrabajadorModal(user)}
                 >Eliminar</DropdownItem>
               </DropdownMenu>
             </Dropdown>
@@ -222,20 +236,24 @@ export default function RegistroTrabajadores() {
                 ))}
               </DropdownMenu>
             </Dropdown>
-            <Button color="primary" onPress={()=>setIsOpenTrabajadorModal(true)} endContent={<Icon  name="plus"></Icon>}>
+            <Button 
+              color="primary" 
+              onPress={() => showTrabajadorModal()} 
+              endContent={<Icon name="plus"></Icon>}
+            >
               Añadir Trabajador
             </Button>
           </div>
         </div>
         <div className="flex justify-between items-center">
-          <span className="text-small">Total: {data?.length} Usuarios</span>
+          <span className="text-small">Total: {tableState.data?.length} Usuarios</span>
         </div>
       </div>
     );
   }, [
     onClear,
     filterValue,
-    data,
+    tableState.data,
     statusFilter,
     visibleColumns,
     onSearchChange,
@@ -257,16 +275,14 @@ export default function RegistroTrabajadores() {
     );
   }, [page, pages]);
 
-  function openTrabajadorModalChange(event: boolean) {
-    setIsOpenTrabajadorModal(event);
+  function showTrabajadorModal(user?: UsuarioModel) {
+    const modalInfo = { isOpen: true, data: user };
+    setTrabajadorModalState(modalInfo);
   }
 
-  function eliminarTrabajadorOpenChange(event: any) {
-    setIsOpenEliminarTrabajador(event);
-  }
-
-  if (!data) {
-    return "Loading...";
+  function showEliminarTrabajadorModal(user: UsuarioModel) {
+    const modalInfo = { isOpen: true, data: user };
+    setEliminarModalState(modalInfo);
   }
 
   return (
@@ -296,7 +312,12 @@ export default function RegistroTrabajadores() {
             </TableColumn>
           )}
         </TableHeader>
-        <TableBody emptyContent={"No users found"} items={sortedItems} loadingState={loadingState}>
+        <TableBody 
+          emptyContent={tableState.isLoading ? "Cargando" : "No se encontraron usuarios"} 
+          items={sortedItems} 
+          loadingContent={<Spinner />}
+          loadingState={loadingState}
+        >
           {(item) => (
             <TableRow key={item.id}>
               {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
@@ -305,12 +326,14 @@ export default function RegistroTrabajadores() {
         </TableBody>
       </Table>
       <TrabajadorModal 
-        isOpen={isOpenTrabajadorModal}
-        onOpenChange={openTrabajadorModalChange}
+        modalState={trabajadorModalState}
+        onOpenChange={setTrabajadorModalState}
+        onSave={reloadTable}
       ></TrabajadorModal>
       <EliminarTrabajador
-        isOpen={isOpenEliminarTrabajador}
-        onOpenChange={eliminarTrabajadorOpenChange}
+        modalState={eliminarModalState}
+        onOpenChange={setEliminarModalState}
+        onSave={()=>reloadTable}
       ></EliminarTrabajador>
     </>
   );

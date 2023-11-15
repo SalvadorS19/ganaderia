@@ -1,11 +1,12 @@
 import React from "react";
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@nextui-org/modal";
 import { Button } from "@nextui-org/button";
+import { ModalInfo } from "@/app/models/modalState.model";
 
-export default function EliminarTrabajador({isOpen, onOpenChange}: any) {
+export default function EliminarTrabajador({modalState, onOpenChange}: ModalInfo) {
 
   return (
-    <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+    <Modal isOpen={modalState.isOpen} onOpenChange={onOpenChange}>
       <ModalContent>
         {(onClose) => (
           <>
