@@ -121,18 +121,10 @@ export default function RegistroTrabajadores() {
         return (
           <User
             avatarProps={{radius: "lg", src: user.avatar}}
-            description={user.email}
             name={cellValue}
           >
             {user.email}
           </User>
-        );
-      case "role":
-        return (
-          <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{cellValue}</p>
-            <p className="text-bold text-tiny capitalize text-default-400">{user.team}</p>
-          </div>
         );
       case "status":
         return (
@@ -260,20 +252,22 @@ export default function RegistroTrabajadores() {
   ]);
 
   const bottomContent = useMemo(() => {
-    return (
-      <div className="py-2 px-2 flex justify-center items-center">
-        <Pagination
-          isCompact
-          showControls
-          showShadow
-          color="primary"
-          page={page}
-          total={pages}
-          onChange={setPage}
-        />
-      </div>
-    );
-  }, [page, pages]);
+    if (!tableState.isLoading) {
+      return (
+        <div className="py-2 px-2 flex justify-center items-center">
+          <Pagination
+            isCompact
+            showControls
+            showShadow
+            color="primary"
+            page={page}
+            total={pages}
+            onChange={setPage}
+          />
+        </div>
+      );
+    }
+  }, [page, pages, tableState.isLoading]);
 
   function showTrabajadorModal(user?: UsuarioModel) {
     const modalInfo = { isOpen: true, data: user };

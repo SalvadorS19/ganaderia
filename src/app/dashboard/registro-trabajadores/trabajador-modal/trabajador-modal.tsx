@@ -60,7 +60,7 @@ export default function TrabajadorModal({modalState, onOpenChange, onSubmit}: Mo
           <ModalContent>
             {(onClose) => (
               <>
-                <ModalHeader className="flex flex-col gap-1">Crear/editar trabajador</ModalHeader>
+                <ModalHeader className="flex flex-col gap-1">{modalState.data ? "Editar" : "Crear"} trabajador</ModalHeader>
                 <ModalBody>
                   <Input
                     label="Nombre"

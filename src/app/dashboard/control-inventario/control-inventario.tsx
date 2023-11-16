@@ -1,56 +1,69 @@
-import { useCallback, useMemo, useState } from "react";
-import {
-  Table,
-  TableHeader,
-  TableColumn,
-  TableBody,
-  TableRow,
-  TableCell,
-  Input,
-  Button,
-  DropdownTrigger,
-  Dropdown,
-  DropdownMenu,
-  DropdownItem,
-  Chip,
-  User,
-  Pagination,
-  Selection,
-  ChipProps,
-  SortDescriptor
-} from "@nextui-org/react";
-import Icon from "@/app/components/icon/icon";
-import {columns, users, statusOptions} from "./data";
 import EliminarArticulo from "./eliminar-articulo/eliminar-articulo";
 import EditarArticulo from "./editar-articulo/editar-articulo";
+import Icon from "@/app/components/icon/icon";
 
-const statusColorMap: Record<string, ChipProps["color"]> = {
-  activo: "success",
-  inactivo: "danger",
-  vacaciones: "warning",
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Selection, SortDescriptor} from "@nextui-org/table";
+import {columns, categoryOptions} from "./data";
+import { ArticuloModel } from "@/app/models/articulo.model";
+import { TableState } from "@/app/models/tableState.model";
+import { InitialModalState, ModalState } from "@/app/models/modalState.model";
+import { API_METHODS } from "@/app/util/fetching";
+import { User } from "@nextui-org/user";
+import { Input } from "@nextui-org/input";
+import { Spinner } from "@nextui-org/spinner";
+import { Button } from "@nextui-org/button";
+import { Dropdown,DropdownItem, DropdownTrigger, DropdownMenu } from "@nextui-org/dropdown";
+import { Chip, ChipProps } from "@nextui-org/chip";
+import { Pagination } from "@nextui-org/pagination";
+
+const categoryColorMap: Record<string, ChipProps["color"]> = {
+  suministro: "success",
+  medicamento: "danger",
+  otros: "warning",
 };
 
-const INITIAL_VISIBLE_COLUMNS = ["name", "type", "amount", "expiration", "supplier", "actions"];
-
-type User = typeof users[0];
+const INITIAL_VISIBLE_COLUMNS = ["name", "category", "amount", "expiration", "supplier", "actions"];
 
 export default function ControlInventario() {
 
-  const [eliminarArticuloIsOpen, setEliminarArticuloIsOpen] = useState(false);
-  const [editarArticuloIsOpen, setEditarArticuloIsOpen] = useState(false);
+  const [tableState, setTableState]: [TableState, Function] = useState({isLoading: true, data: []});
+  const [articuloModalState, setArticuloModalState]: [ModalState, Function] = useState(InitialModalState);
+  const [eliminarModalState, setEliminarModalState]: [ModalState, Function] = useState(InitialModalState);
   const [filterValue, setFilterValue] = useState("");
-  const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
   const [visibleColumns, setVisibleColumns] = useState<Selection>(new Set(INITIAL_VISIBLE_COLUMNS));
-  const [statusFilter, setStatusFilter] = useState<Selection>("all");
+  const [categoryFilter, setCategoryFilter] = useState<Selection>("all");
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
     column: "type",
     direction: "ascending",
   });
-
   const [page, setPage] = useState(1);
 
+  const loadTable = async () => {
+    await fetch(API_METHODS.articulo.default)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        const status = { isLoading: false, data }
+        setTableState(status);
+      }
+    ).catch((error) => console.log(error));
+  }
+
+  const reloadTable = () => {
+    const status: TableState = { ...tableState, isLoading: true}
+    setTableState(status);
+    loadTable();
+  }
+
+  useEffect(() => {
+    loadTable();
+  }, [])
+
   const hasSearchFilter = Boolean(filterValue);
+
+  const loadingState = tableState.isLoading ? "loading" : "idle";
 
   const headerColumns = useMemo(() => {
     if (visibleColumns === "all") return columns;
@@ -59,64 +72,63 @@ export default function ControlInventario() {
   }, [visibleColumns]);
 
   const filteredItems = useMemo(() => {
-    let filteredUsers = [...users];
+    if (tableState.data) {
+      let filteredArticulos = [...tableState.data];
 
-    if (hasSearchFilter) {
-      filteredUsers = filteredUsers.filter((user) =>
-        user.name.toLowerCase().includes(filterValue.toLowerCase()),
-      );
+      if (hasSearchFilter) {
+        filteredArticulos = filteredArticulos.filter((articulo) =>
+          articulo.name.toLowerCase().includes(filterValue.toLowerCase()),
+        );
+      }
+      if (categoryFilter !== "all" && Array.from(categoryFilter).length !== categoryOptions.length) {
+        filteredArticulos = filteredArticulos.filter((articulo) =>
+          Array.from(categoryFilter).includes(articulo.category),
+        );
+      }
+
+      return filteredArticulos;
     }
-    if (statusFilter !== "all" && Array.from(statusFilter).length !== statusOptions.length) {
-      filteredUsers = filteredUsers.filter((user) =>
-        Array.from(statusFilter).includes(user.status),
-      );
-    }
+  }, [hasSearchFilter, filterValue, categoryFilter, tableState.data]);
 
-    return filteredUsers;
-  }, [hasSearchFilter, filterValue, statusFilter]);
-
-  const pages = Math.ceil(filteredItems.length / rowsPerPage);
+  const pages = filteredItems? Math.ceil(filteredItems.length / rowsPerPage) : 1;
 
   const items = useMemo(() => {
-    const start = (page - 1) * rowsPerPage;
-    const end = start + rowsPerPage;
+    if (filteredItems) {
+      const start = (page - 1) * rowsPerPage;
+      const end = start + rowsPerPage;
 
-    return filteredItems.slice(start, end);
+      return filteredItems.slice(start, end);
+    }
   }, [page, filteredItems, rowsPerPage]);
 
   const sortedItems = useMemo(() => {
-    return [...items].sort((a: User, b: User) => {
-      const first = a[sortDescriptor.column as keyof User] as number;
-      const second = b[sortDescriptor.column as keyof User] as number;
-      const cmp = first < second ? -1 : first > second ? 1 : 0;
-
-      return sortDescriptor.direction === "descending" ? -cmp : cmp;
-    });
+    if (items) {
+      return [...items].sort((a: ArticuloModel, b: ArticuloModel) => {
+        const first = a[sortDescriptor.column as keyof ArticuloModel] as number;
+        const second = b[sortDescriptor.column as keyof ArticuloModel] as number;
+        const cmp = first < second ? -1 : first > second ? 1 : 0;
+  
+        return sortDescriptor.direction === "descending" ? -cmp : cmp;
+      });
+    }
   }, [sortDescriptor, items]);
 
-  const renderCell = useCallback((user: User, columnKey: React.Key) => {
-    const cellValue = user[columnKey as keyof User];
-    console.log(cellValue, user)
+  const renderCell = useCallback((articulo: ArticuloModel, columnKey: React.Key) => {
+    const cellValue: any = articulo[columnKey as keyof ArticuloModel];
     switch (columnKey) {
       case "name":
         return (
           <User
-            avatarProps={{radius: "lg", src: user.avatar}}
-            description={user.supplier}
-            name={cellValue}
-          >
-          </User>
+            avatarProps={{radius: "lg", src: articulo.picture}}
+            name={articulo.name}
+          ></User>
         );
-      case "amount":
+      case "expiration":
+        const date = new Date(cellValue);
+        return date.toLocaleDateString();
+      case "category":
         return (
-          <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{cellValue}</p>
-            <p className="text-bold text-tiny capitalize text-default-400"></p>
-          </div>
-        );
-      case "status":
-        return (
-          <Chip className="capitalize" color={statusColorMap[user.status]} size="sm" variant="flat">
+          <Chip className="capitalize" color={categoryColorMap[articulo.category]} size="sm" variant="flat">
             {cellValue}
           </Chip>
         );
@@ -131,10 +143,10 @@ export default function ControlInventario() {
               </DropdownTrigger>
               <DropdownMenu>
                 <DropdownItem
-                  onPress={()=> editarArticuloOpenChange(true)}
+                  onClick={()=> showArticuloModal(articulo)}
                 >Editar</DropdownItem>
                 <DropdownItem
-                  onPress={()=> eliminarArticuloOpenChange(true)}
+                  onClick={()=> showEliminarArticuloModal(articulo)}
                 >Eliminar</DropdownItem>
               </DropdownMenu>
             </Dropdown>
@@ -143,23 +155,6 @@ export default function ControlInventario() {
       default:
         return cellValue;
     }
-  }, []);
-
-  const onNextPage = useCallback(() => {
-    if (page < pages) {
-      setPage(page + 1);
-    }
-  }, [page, pages]);
-
-  const onPreviousPage = useCallback(() => {
-    if (page > 1) {
-      setPage(page - 1);
-    }
-  }, [page]);
-
-  const onRowsPerPageChange = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
-    setRowsPerPage(Number(e.target.value));
-    setPage(1);
   }, []);
 
   const onSearchChange = useCallback((value?: string) => {
@@ -193,20 +188,20 @@ export default function ControlInventario() {
             <Dropdown>
               <DropdownTrigger className="hidden sm:flex">
                 <Button endContent={<Icon  name="angle-down"></Icon>} variant="flat">
-                  Tipo
+                  Categoria
                 </Button>
               </DropdownTrigger>
               <DropdownMenu
                 disallowEmptySelection
                 aria-label="Table Columns"
                 closeOnSelect={false}
-                selectedKeys={statusFilter}
+                selectedKeys={categoryFilter}
                 selectionMode="multiple"
-                onSelectionChange={setStatusFilter}
+                onSelectionChange={setCategoryFilter}
               >
-                {statusOptions.map((status) => (
-                  <DropdownItem key={status.uid} className="capitalize">
-                    {(status.name)}
+                {categoryOptions.map((category) => (
+                  <DropdownItem key={category.uid} className="capitalize">
+                    {(category.name)}
                   </DropdownItem>
                 ))}
               </DropdownMenu>
@@ -233,8 +228,8 @@ export default function ControlInventario() {
               </DropdownMenu>
             </Dropdown>
             <Button 
-              onPress={()=> editarArticuloOpenChange(true)}
               color="primary" 
+              onClick={() => showArticuloModal()}
               endContent={<Icon  name="plus"></Icon>}
             >
               Añadir Material
@@ -242,40 +237,46 @@ export default function ControlInventario() {
           </div>
         </div>
         <div className="flex justify-between items-center">
-          <span className="text-small">Total: {users.length} Materiales</span>
+          <span className="text-small">Total: {tableState.data?.length} Materiales</span>
         </div>
       </div>
     );
   }, [
     onClear,
     filterValue,
-    statusFilter,
+    tableState.data,
+    categoryFilter,
     visibleColumns,
     onSearchChange,
   ]);
 
   const bottomContent = useMemo(() => {
-    return (
-      <div className="py-2 px-2 flex justify-center items-center">
-        <Pagination
-          isCompact
-          showControls
-          showShadow
-          color="primary"
-          page={page}
-          total={pages}
-          onChange={setPage}
-        />
-      </div>
-    );
-  }, [page, pages]);
+    if (!tableState.isLoading) {
+      return (
+        <div className="py-2 px-2 flex justify-center items-center">
+          <Pagination
+            isCompact
+            showControls
+            showShadow
+            color="primary"
+            page={page}
+            total={pages}
+            onChange={setPage}
+          />
+        </div>
+      );
+    }
+  }, [page, pages, tableState.isLoading]);
 
-  function eliminarArticuloOpenChange(event: any) {
-    setEliminarArticuloIsOpen(event);
+  function showArticuloModal(user?: ArticuloModel) {
+    const modalInfo = { isOpen: true, data: user };
+    setArticuloModalState(modalInfo);
   }
 
-  function editarArticuloOpenChange(event: any) {
-    setEditarArticuloIsOpen(event);
+  function showEliminarArticuloModal(user: ArticuloModel) {
+    const modalInfo = { isOpen: true, data: user };
+    console.log(modalInfo);
+    setEliminarModalState(modalInfo);
   }
 
   return (
@@ -304,21 +305,28 @@ export default function ControlInventario() {
           </TableColumn>
         )}
       </TableHeader>
-      <TableBody emptyContent={"No users found"} items={sortedItems}>
-        {(item) => (
-          <TableRow key={item.id}>
-            {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
-          </TableRow>
-        )}
-      </TableBody>
+      <TableBody 
+          emptyContent={tableState.isLoading ? "Cargando" : "No se encontraron articulos"} 
+          items={sortedItems} 
+          loadingContent={<Spinner />}
+          loadingState={loadingState}
+        >
+          {(item) => (
+            <TableRow key={item.id}>
+              {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
+            </TableRow>
+          )}
+        </TableBody>
       </Table>
       <EditarArticulo
-        isOpen={editarArticuloIsOpen}
-        onOpenChange={editarArticuloOpenChange}
+        modalState={articuloModalState}
+        onOpenChange={setArticuloModalState}
+        onSubmit={reloadTable}
       ></EditarArticulo>
       <EliminarArticulo
-        isOpen={eliminarArticuloIsOpen}
-        onOpenChange={eliminarArticuloOpenChange}
+        modalState={eliminarModalState}
+        onOpenChange={setEliminarModalState}
+        onSubmit={reloadTable}
       ></EliminarArticulo>
     </>
   );

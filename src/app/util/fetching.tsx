@@ -34,6 +34,7 @@ export const API_METHODS = {
         byUserId: `${API_URL}/user/`
     },
     articulo: {
-        default: `${API_URL}/articulo`
+        default: `${API_URL}/articulo`,
+        byArticuloId: `${API_URL}/articulo/`
     }
 }
