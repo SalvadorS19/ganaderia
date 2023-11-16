@@ -1,7 +1,7 @@
 export interface ModalInfo {
     modalState: ModalState;
     onOpenChange: any;
-    onSave: Function;
+    onSubmit: Function;
 }
 
 export interface ModalState {

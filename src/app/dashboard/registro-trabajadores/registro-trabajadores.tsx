@@ -53,7 +53,7 @@ export default function RegistroTrabajadores() {
   }
 
   const reloadTable = () => {
-    const status = { isLoading: true, data: []}
+    const status: TableState = { ...tableState, isLoading: true}
     setTableState(status);
     loadTable();
   }
@@ -328,12 +328,12 @@ export default function RegistroTrabajadores() {
       <TrabajadorModal 
         modalState={trabajadorModalState}
         onOpenChange={setTrabajadorModalState}
-        onSave={reloadTable}
+        onSubmit={reloadTable}
       ></TrabajadorModal>
       <EliminarTrabajador
         modalState={eliminarModalState}
         onOpenChange={setEliminarModalState}
-        onSave={()=>reloadTable}
+        onSubmit={reloadTable}
       ></EliminarTrabajador>
     </>
   );
