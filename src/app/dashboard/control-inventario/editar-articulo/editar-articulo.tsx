@@ -5,11 +5,18 @@ import { useEffect, useState } from "react";
 import { API_METHODS, POST, PUT } from "@/app/util/fetching";
 import { ModalInfo } from "@/app/models/modalState.model";
 import { ArticuloModel, EmptyArticuloModel } from "@/app/models/articulo.model";
+import { Autocomplete, AutocompleteItem } from "@nextui-org/autocomplete";
 
 export default function EditarArticulo({modalState, onOpenChange, onSubmit}: ModalInfo) {
  
     const [articuloForm, setArticuloForm]: [ArticuloModel, Function] = useState(EmptyArticuloModel());
     const [loading, setLoading]: [boolean, Function] = useState(false);
+
+    const categoryOptions = [
+      {label: "Medicamento", value: "medicamento"}, 
+      {label: "Herramienta", value: 'herramienta'},
+      {label: "Otro", value: "otro"}
+    ]
 
     useEffect(() => {
       if (modalState.data) {
@@ -86,14 +93,15 @@ export default function EditarArticulo({modalState, onOpenChange, onSubmit}: Mod
                     variant="bordered"
                     onChange={handleArticuloForm}
                   />
-                  <Input
+                  <Autocomplete
+                    defaultItems={categoryOptions}
                     label="Categoria"
-                    name="category"
-                    value={articuloForm.category}
-                    placeholder="Ingresar categoria"
+                    onValueChange={(event) => console.log(event)}
+                    placeholder="Seleccione la categoria"
                     variant="bordered"
-                    onChange={handleArticuloForm}
-                  />
+                  >
+                    {(category) => <AutocompleteItem key={category.value}>{category.label}</AutocompleteItem>}
+                  </Autocomplete>
                   <Input
                     label="Imagen"
                     name="picture"
