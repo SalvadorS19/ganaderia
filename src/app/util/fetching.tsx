@@ -36,5 +36,9 @@ export const API_METHODS = {
     articulo: {
         default: `${API_URL}/articulo`,
         byArticuloId: `${API_URL}/articulo/`
+    },
+    actividad: {
+        default: `${API_URL}/actividad`,
+        byActividadId: `${API_URL}/actividad/`
     }
 }
