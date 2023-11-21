@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { API_METHODS, POST, PUT } from "@/app/util/fetching";
 import { ModalInfo } from "@/app/models/modalState.model";
 import { ArticuloModel, EmptyArticuloModel } from "@/app/models/articulo.model";
-import { Autocomplete, AutocompleteItem } from "@nextui-org/autocomplete";
 
 export default function EditarArticulo({modalState, onOpenChange, onSubmit}: ModalInfo) {
  
@@ -93,15 +92,13 @@ export default function EditarArticulo({modalState, onOpenChange, onSubmit}: Mod
                     variant="bordered"
                     onChange={handleArticuloForm}
                   />
-                  <Autocomplete
-                    defaultItems={categoryOptions}
+                  <Input
                     label="Categoria"
-                    onValueChange={(event) => console.log(event)}
-                    placeholder="Seleccione la categoria"
+                    name="category"
+                    value={articuloForm.category}
                     variant="bordered"
-                  >
-                    {(category) => <AutocompleteItem key={category.value}>{category.label}</AutocompleteItem>}
-                  </Autocomplete>
+                    onChange={handleArticuloForm}
+                  />
                   <Input
                     label="Imagen"
                     name="picture"
