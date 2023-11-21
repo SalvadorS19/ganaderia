@@ -2,6 +2,8 @@
 import "./dashboard.css"
 import RegistroAnimales from "./registro-animales/registro-animales";
 import RegistroTrabajadores from "./registro-trabajadores/registro-trabajadores";
+import RegistroActividades from "./registro-actividades/registro-actividades";
+import PlanPastoreo from "./plan-pastoreo/plan-pastoreo";
 import { useState } from "react";
 import { useAuth } from "../services/auth.provider";
 import { redirect } from "next/navigation";
@@ -19,6 +21,8 @@ export default function Dashboard(){
     const modules: Modulo = {
         1: <RegistroAnimales></RegistroAnimales>,
         2: <ControlInventario></ControlInventario>,
+        3: <PlanPastoreo></PlanPastoreo>,
+        5: <RegistroActividades></RegistroActividades>,
         7: <RegistroTrabajadores></RegistroTrabajadores>
     }
 

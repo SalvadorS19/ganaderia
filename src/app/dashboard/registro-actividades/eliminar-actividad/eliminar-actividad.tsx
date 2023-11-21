@@ -3,16 +3,16 @@ import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@nextu
 import { Button } from "@nextui-org/button";
 import { ModalInfo } from "@/app/models/modalState.model";
 import { API_METHODS, DELETE } from "@/app/util/fetching";
-import { ArticuloModel } from "@/app/models/articulo.model";
+import { ActividadModel } from "@/app/models/actividad.model";
 
-export default function EliminarArticulo({modalState, onOpenChange, onSubmit}: ModalInfo) {
+export default function EliminarActividad({modalState, onOpenChange, onSubmit}: ModalInfo) {
 
-  const articulo: ArticuloModel = modalState.data;
+  const actividad: ActividadModel = modalState.data;
   const [loading, setLoading]: [boolean, Function] = useState(false);
 
   async function submit(onClose: Function) {
     setLoading(true);
-    await fetch(API_METHODS.articulo.byArticuloId+ articulo.id, {...DELETE})
+    await fetch(API_METHODS.actividad.byActividadId+ actividad.id, {...DELETE})
       .then((response) => {
         setLoading(false);
         onClose();
@@ -28,7 +28,7 @@ export default function EliminarArticulo({modalState, onOpenChange, onSubmit}: M
             <ModalHeader className="flex flex-col gap-1">Confirmación requerida</ModalHeader>
             <ModalBody>
               <p> 
-                ¿Está seguro de eliminar el articulo <b> {articulo.name} </b>?
+                ¿Está seguro de eliminar la actividad?
               </p>
             </ModalBody>
             <ModalFooter>

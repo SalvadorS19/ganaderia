@@ -1,57 +1,68 @@
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@nextui-org/modal";
 import { Input } from "@nextui-org/input";
 import { Button} from "@nextui-org/button";
-import { UsuarioModel } from "@/app/models/usuario.model";
-import { useState } from "react";
-import { API_METHODS, POST } from "@/app/util/fetching";
+import { EmptyUsuarioModel, UsuarioModel } from "@/app/models/usuario.model";
+import { useEffect, useState } from "react";
+import { API_METHODS, POST, PUT } from "@/app/util/fetching";
+import { ModalInfo } from "@/app/models/modalState.model";
 
-export default function TrabajadorModal({isOpen, onOpenChange}: any) {
+export default function TrabajadorModal({modalState, onOpenChange, onSubmit}: ModalInfo) {
 
-    const emptyUsuario: UsuarioModel = {
-      name: '', 
-      username: '', 
-      age: '', 
-      avatar: '', 
-      email: '', 
-      role: '', 
-      status: 'activo', 
-      team: ''
+  const [usuarioForm, setUsuarioForm]: [UsuarioModel, Function] = useState(EmptyUsuarioModel());
+  const [loading, setLoading]: [boolean, Function] = useState(false);
+
+  useEffect(() => {
+    if (modalState.data) {
+      setUsuarioForm(modalState.data)
+    } else {
+      setUsuarioForm(EmptyUsuarioModel)
     }
-    const [usuarioForm, setUsuarioForm]: [UsuarioModel, Function] = useState(emptyUsuario);
+  }, [modalState.data])
 
-    function handleUsuarioForm(event: any) {
-        const {name, value} = event.target;
-        setUsuarioForm((prevFormData: UsuarioModel) => ({
-            ...prevFormData,
-            [name]: value,
-        }));   
-    }
+  function handleUsuarioForm(event: any) {
+    const {name, value} = event.target;
+    setUsuarioForm((prevFormData: UsuarioModel) => ({
+      ...prevFormData,
+      [name]: value,
+    }));   
+  }
 
-    async function submitUsuarioForm(onClose: Function) {
-      const body = JSON.stringify(usuarioForm);
-      console.log(body);
+  async function submitUsuarioForm(onClose: Function) {
+    setLoading(true);
+    const body = JSON.stringify(usuarioForm);
+    if (usuarioForm?.id) {
+      await fetch(API_METHODS.user.default, { ...PUT, body })
+      .then((response) => response.text())
+      .then((data) => {
+        setLoading(false);
+        onClose();
+        onSubmit();
+      })
+      .catch((error) => console.log(error));
+    } else {
       await fetch(API_METHODS.user.default, { ...POST, body })
-        .then((response) => response.text())
-        .then((data) => {
-          console.log(data);
-          onClose();
-        })
-        .catch((error) => console.log(error));
+      .then((response) => response.text())
+      .then((data) => {
+        setLoading(false);
+        onClose();
+        onSubmit();
+      })
+      .catch((error) => console.log(error));
     }
+  }
     
     return (
         <Modal 
-          isOpen={isOpen} 
+          isOpen={modalState.isOpen} 
           onOpenChange={onOpenChange}
           placement="top-center"
         >
           <ModalContent>
             {(onClose) => (
               <>
-                <ModalHeader className="flex flex-col gap-1">Crear/editar trabajador</ModalHeader>
+                <ModalHeader className="flex flex-col gap-1">{modalState.data ? "Editar" : "Crear"} trabajador</ModalHeader>
                 <ModalBody>
                   <Input
-                    autoFocus
                     label="Nombre"
                     name="name"
                     value={usuarioForm.name}
@@ -127,7 +138,7 @@ export default function TrabajadorModal({isOpen, onOpenChange}: any) {
                   <Button color="danger" variant="flat" onPress={onClose}>
                     Cerrar
                   </Button>
-                  <Button color="primary" onPress={()=>{submitUsuarioForm(onClose)}}>
+                  <Button isLoading={loading} color="primary" onPress={()=>submitUsuarioForm(onClose)}>
                     Guardar
                   </Button>
                 </ModalFooter>

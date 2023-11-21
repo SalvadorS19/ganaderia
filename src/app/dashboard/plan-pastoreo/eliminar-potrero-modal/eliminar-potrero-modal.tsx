@@ -2,24 +2,24 @@ import React, { useState } from "react";
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@nextui-org/modal";
 import { Button } from "@nextui-org/button";
 import { ModalInfo } from "@/app/models/modalState.model";
+import { PotreroModel } from "@/app/models/potrero.model";
 import { API_METHODS, DELETE } from "@/app/util/fetching";
-import { ArticuloModel } from "@/app/models/articulo.model";
 
-export default function EliminarArticulo({modalState, onOpenChange, onSubmit}: ModalInfo) {
+export default function EliminarPotrero({modalState, onOpenChange, onSubmit}: ModalInfo) {
 
-  const articulo: ArticuloModel = modalState.data;
+  const potrero: PotreroModel = modalState.data;
   const [loading, setLoading]: [boolean, Function] = useState(false);
 
   async function submit(onClose: Function) {
     setLoading(true);
-    await fetch(API_METHODS.articulo.byArticuloId+ articulo.id, {...DELETE})
+    await fetch(API_METHODS.user.byUserId + potrero.id, {...DELETE})
       .then((response) => {
         setLoading(false);
         onClose();
         onSubmit();
     });
   }
-  
+
   return (
     <Modal isOpen={modalState.isOpen} onOpenChange={onOpenChange}>
       <ModalContent>
@@ -28,7 +28,7 @@ export default function EliminarArticulo({modalState, onOpenChange, onSubmit}: M
             <ModalHeader className="flex flex-col gap-1">Confirmación requerida</ModalHeader>
             <ModalBody>
               <p> 
-                ¿Está seguro de eliminar el articulo <b> {articulo.name} </b>?
+                ¿Está seguro de eliminar el potrero <b> mientras </b>?
               </p>
             </ModalBody>
             <ModalFooter>
